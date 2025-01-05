@@ -1,5 +1,5 @@
-import { faker } from "@faker-js/faker";
-import { UserProps } from "../../entities/user.entity";
+import { faker } from '@faker-js/faker'
+import { UserProps } from '../../entities/user.entity'
 
 export const UserDataBuilder = (props: Partial<UserProps>): UserProps => {
   return {
