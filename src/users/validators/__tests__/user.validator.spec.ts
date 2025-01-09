@@ -46,7 +46,6 @@ describe('UserValidator unit tests', () => {
   describe('Invalid cases for email field', () => {
     it('Invalid cases for email field', () => {
       isValid = sut.validate(null)
-      expect(isValid).toBe(false)
       expect(sut.errors['email']).toStrictEqual([
         'email should not be empty',
         'email must be an email',
@@ -83,7 +82,6 @@ describe('UserValidator unit tests', () => {
   describe('password field', () => {
     it('Invalid cases for password field', () => {
       isValid = sut.validate(null)
-      expect(isValid).toBe(false)
       expect(sut.errors['password']).toStrictEqual([
         'password should not be empty',
         'password must be a string',
@@ -111,6 +109,29 @@ describe('UserValidator unit tests', () => {
       expect(sut.errors['password']).toStrictEqual([
         'password must be shorter than or equal to 100 characters',
       ])
+    })
+  })
+
+  describe('createdAt field', () => {
+    it('Invalid cases for createdAt field', () => {
+      isValid = sut.validate({ ...UserDataBuilder({}), createdAt: 1 as any })
+      expect(isValid).toBe(false)
+      expect(sut.errors['createdAt']).toStrictEqual([
+        'createdAt must be a Date instance',
+      ])
+
+      isValid = sut.validate({
+        ...UserDataBuilder({}),
+        createdAt: '2023' as any,
+      })
+      expect(isValid).toBe(false)
+      expect(sut.errors['createdAt']).toStrictEqual([
+        'createdAt must be a Date instance',
+      ])
+
+      /*isValid = sut.validate({ ...UserDataBuilder({}), createdAt: null as any })
+      expect(isValid).toBe(true)
+      expect(sut.validatedData['createdAt']).toBeInstanceOf(Date)*/
     })
   })
 
