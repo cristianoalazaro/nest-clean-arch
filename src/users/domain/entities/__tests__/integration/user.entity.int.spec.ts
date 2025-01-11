@@ -60,5 +60,45 @@ describe('UserEntity integration tests', () => {
       }
       expect(() => new UserEntity(props)).toThrow('Entity Validation Error')
     })
+
+    it('Should throw an error when creating a user with invalid password', () => {
+      props = {
+        ...UserDataBuilder({}),
+        email: null,
+      }
+      expect(() => new UserEntity(props)).toThrow('Entity Validation Error')
+
+      props = {
+        ...UserDataBuilder({}),
+        email: '',
+      }
+      expect(() => new UserEntity(props)).toThrow('Entity Validation Error')
+
+      props = {
+        ...UserDataBuilder({}),
+        email: 'a'.repeat(101),
+      }
+      expect(() => new UserEntity(props)).toThrow('Entity Validation Error')
+
+      props = {
+        ...UserDataBuilder({}),
+        email: 1 as any,
+      }
+      expect(() => new UserEntity(props)).toThrow('Entity Validation Error')
+    })
+
+    it('Should throw an error when creating a user with invalid createdAt', () => {
+      props = {
+        ...UserDataBuilder({}),
+        email: '2025',
+      }
+      expect(() => new UserEntity(props)).toThrow('Entity Validation Error')
+
+      props = {
+        ...UserDataBuilder({}),
+        email: 1 as any,
+      }
+      expect(() => new UserEntity(props)).toThrow('Entity Validation Error')
+    })
   })
 })
