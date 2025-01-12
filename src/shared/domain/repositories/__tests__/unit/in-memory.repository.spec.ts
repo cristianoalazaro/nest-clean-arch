@@ -42,4 +42,22 @@ describe('InMemoryRepository unit tests', () => {
     const result = await sut.findAll()
     expect([entity]).toStrictEqual(result)
   })
+
+  it('Should throw an error on update when an entity not found', async () => {
+    const entity = new StubEntity({ name: 'test name', price: 50 })
+    await expect(sut.update(entity)).rejects.toThrow(
+      new NotFoundError('Item not found'),
+    )
+  })
+
+  it('Should update an entity', async () => {
+    const entity = new StubEntity({ name: 'test name', price: 50 })
+    await sut.insert(entity)
+    const updatedEntity = new StubEntity(
+      { name: 'other name', price: 100 },
+      entity._id,
+    )
+    await sut.update(updatedEntity)
+    expect(updatedEntity.toJson()).toStrictEqual(sut.itens[0].toJson())
+  })
 })
