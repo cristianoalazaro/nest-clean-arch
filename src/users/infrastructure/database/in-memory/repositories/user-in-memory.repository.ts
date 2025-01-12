@@ -1,11 +1,12 @@
 import { ConflictError } from '@/shared/domain/errors/conflict-error'
+import { InMemorySearchableRepository } from '@/shared/domain/repositories/in-memory-searchable.repository'
 import { InMemoryRepository } from '@/shared/domain/repositories/in-memory.repository'
 import { UserEntity } from '@/users/domain/entities/user.entity'
 import { UserRepository } from '@/users/domain/repositories/user.repository'
 import { NotFoundException } from '@nestjs/common'
 
 export class UserInMemoryRepository
-  extends InMemoryRepository<UserEntity>
+  extends InMemorySearchableRepository<UserEntity>
   implements UserRepository
 {
   async findByEmail(email: string): Promise<UserEntity> {
