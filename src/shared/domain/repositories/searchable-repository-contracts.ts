@@ -18,20 +18,20 @@ export class SearchParams {
   protected _sortDir: SortDirection | null
   protected _filter: string
 
-  constructor(props: SearchProps) {
-    this._page = props.page
-    this._perPage = props.perPage
-    this._sort = props.sort
-    this._sortDir = props.sortDir
-    this._filter = props.filter
+  constructor(props: SearchProps = {}) {
+    this.page = props.page
+    this.perPage = props.perPage
+    this.sort = props.sort
+    this.sortDir = props.sortDir
+    this.filter = props.filter
   }
 
   //getters and setters
-  getPage() {
+  get page() {
     return this._page
   }
 
-  private setPage(value: number) {
+  private set page(value: number) {
     let _page = +value
     if (Number.isNaN(_page) || _page <= 0 || parseInt(_page as any) !== _page) {
       _page = 1
@@ -39,36 +39,36 @@ export class SearchParams {
     this._page = _page
   }
 
-  getPerPage() {
+  get perPage() {
     return this._perPage
   }
 
-  private setPerPage(value: number) {
-    let _perPage = +value
+  private set perPage(value: number) {
+    let _perPage = value === (true as any) ? this._perPage : +value
     if (
       Number.isNaN(_perPage) ||
       _perPage <= 0 ||
       parseInt(_perPage as any) !== _perPage
     ) {
-      _perPage = 1
+      _perPage = this._perPage
     }
     this._perPage = _perPage
   }
 
-  getSort() {
+  get sort() {
     return this._sort
   }
 
-  private setSort(value: string | null) {
+  private set sort(value: string | null) {
     this._sort =
       value === null || value === undefined || value === '' ? null : `${value}`
   }
 
-  getSortDir() {
+  get sortDir() {
     return this._sortDir
   }
 
-  private setSortDir(value: SortDirection) {
+  private set sortDir(value: SortDirection) {
     if (!this._sort) {
       this._sortDir = null
       return
@@ -78,11 +78,11 @@ export class SearchParams {
     this._sortDir = dir !== 'asc' && dir !== 'desc' ? 'desc' : dir
   }
 
-  getFilter() {
+  get filter() {
     return this._filter
   }
 
-  private setFilter(value: string) {
+  private set filter(value: string) {
     this._filter =
       value === null || value === undefined || value === '' ? null : `${value}`
   }
