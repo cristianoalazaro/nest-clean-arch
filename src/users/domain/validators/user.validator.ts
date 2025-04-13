@@ -1,5 +1,6 @@
 import {
   IsDate,
+  IsEmail,
   IsNotEmpty,
   IsOptional,
   IsString,
@@ -14,7 +15,7 @@ export class UserRules {
   @MaxLength(255)
   name: string
 
-  @IsString()
+  @IsEmail()
   @IsNotEmpty()
   @MaxLength(255)
   email: string
