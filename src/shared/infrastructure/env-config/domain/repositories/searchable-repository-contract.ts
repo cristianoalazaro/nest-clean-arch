@@ -13,17 +13,17 @@ type SearchProps<Filter = string> = {
 
 export class SearchParams {
   protected _page: number
-  protected _perPage = 15
+  protected _perPage: number = 15
   protected _sort: string | null
-  protected _sortDir: SortDirection | null
+  protected _sortDir: string | null
   protected _filter: string | null
 
-  constructor(props: SearchProps) {
-    this._page = props.page ?? 1
-    this._perPage = props.perPage ?? this._perPage
-    this._sort = props.sort ?? null
-    this._sortDir = props.sortDir ?? null
-    this._filter = props.filter ?? null
+  constructor(props: SearchProps = {}) {
+    this.page = props.page ?? 1
+    this.perPage = props.perPage ?? 15
+    this.sort = props.sort ?? null
+    this.sortDir = props.sortDir ?? null
+    this.filter = props.filter ?? null
   }
 
   get page() {
@@ -31,13 +31,10 @@ export class SearchParams {
   }
 
   private set page(value: number) {
-    let _page = +value
+    let _page = Number(value)
 
-    if (!Number.isNaN(_page) || _page <= 0) {
-      this._page = 1
-    }
-
-    this._page = value
+    this._page =
+      Number.isNaN(_page) || !Number.isInteger(_page) || _page <= 0 ? 1 : _page
   }
 
   get perPage() {
@@ -45,13 +42,12 @@ export class SearchParams {
   }
 
   private set perPage(value: number) {
-    let _perPage = +value
+    let _perPage = value === (true as any) ? 15 : Number(value)
 
-    if (!Number.isNaN(_perPage) || _perPage <= 0) {
-      this._perPage = this._perPage
-    }
-
-    this._perPage = value
+    this._perPage =
+      Number.isNaN(_perPage) || !Number.isInteger(_perPage) || _perPage <= 0
+        ? 15
+        : _perPage
   }
 
   get sort(): string | null {
@@ -68,12 +64,12 @@ export class SearchParams {
   }
 
   private set sortDir(value: string | null) {
-    if (!value) {
+    if (!this.sort) {
       this._sortDir = null
       return
     }
 
-    const dir = `${value.toLowerCase()}`
+    const dir = `${value}`.toLowerCase()
     this._sortDir = dir !== 'asc' && dir !== 'desc' ? 'desc' : dir
   }
 
