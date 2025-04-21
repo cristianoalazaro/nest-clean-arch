@@ -93,7 +93,7 @@ export class SearchParams {
   }
 }
 
-export class SearchResultParams<E extends Entity, Filter = string> {
+export class SearchResult<E extends Entity, Filter = string> {
   readonly items: E[]
   readonly total: number
   readonly currentPage: number
@@ -130,8 +130,9 @@ export class SearchResultParams<E extends Entity, Filter = string> {
 
 export interface SearchableRepository<
   E extends Entity,
-  SearchInput,
-  SearchOutput,
+  Filter = string,
+  SearchInput = SearchParams,
+  SearchOutput = SearchResult<E, Filter>,
 > extends RepositoryInterface<E> {
-  search(props: SearchParams): Promise<SearchOutput>
+  search(props: SearchInput): Promise<SearchOutput>
 }
