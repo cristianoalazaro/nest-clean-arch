@@ -65,7 +65,47 @@ describe('InMemorySearchableRepository unit tests', () => {
     })
   })
 
-  describe('ApplySort method', () => {})
+  describe('ApplySort method', () => {
+    it('Should no sort items', async () => {
+      const items = [
+        new StubEntity({ name: 'test', price: 50 }),
+        new StubEntity({ name: 'TEST', price: 50 }),
+        new StubEntity({ name: 'fake', price: 50 }),
+      ]
+
+      let sortedItems = await sut['applySort'](items, null, null)
+
+      expect(sortedItems).toStrictEqual(items)
+
+      sortedItems = await sut['applySort'](items, 'price', 'asc')
+
+      expect(sortedItems).toStrictEqual(items)
+    })
+
+    it('Should sort items', async () => {
+      const items = [
+        new StubEntity({ name: 'b', price: 50 }),
+        new StubEntity({ name: 'a', price: 50 }),
+        new StubEntity({ name: 'c', price: 50 }),
+      ]
+
+      //const spyonSort = jest.spyOn(items, 'sort')
+      let sortedItems = await sut['applySort'](items, 'name', null)
+
+      expect(sortedItems).toStrictEqual([items[2], items[0], items[1]])
+      //expect(spyonSort).not.toHaveBeenCalled()
+
+      sortedItems = await sut['applySort'](items, 'name', 'desc')
+
+      expect(sortedItems).toStrictEqual([items[2], items[0], items[1]])
+      //expect(spyonSort).not.toHaveBeenCalled()
+
+      sortedItems = await sut['applySort'](items, 'name', 'asc')
+
+      expect(sortedItems).toStrictEqual([items[1], items[0], items[2]])
+    })
+  })
+
   describe('ApplyPaginate method', () => {})
   describe('Sort method', () => {})
 })
