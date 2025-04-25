@@ -74,11 +74,9 @@ describe('InMemorySearchableRepository unit tests', () => {
       ]
 
       let sortedItems = await sut['applySort'](items, null, null)
-
       expect(sortedItems).toStrictEqual(items)
 
       sortedItems = await sut['applySort'](items, 'price', 'asc')
-
       expect(sortedItems).toStrictEqual(items)
     })
 
@@ -89,23 +87,18 @@ describe('InMemorySearchableRepository unit tests', () => {
         new StubEntity({ name: 'c', price: 50 }),
       ]
 
-      //const spyonSort = jest.spyOn(items, 'sort')
       let sortedItems = await sut['applySort'](items, 'name', null)
-
       expect(sortedItems).toStrictEqual([items[2], items[0], items[1]])
-      //expect(spyonSort).not.toHaveBeenCalled()
 
       sortedItems = await sut['applySort'](items, 'name', 'desc')
-
       expect(sortedItems).toStrictEqual([items[2], items[0], items[1]])
-      //expect(spyonSort).not.toHaveBeenCalled()
 
       sortedItems = await sut['applySort'](items, 'name', 'asc')
-
       expect(sortedItems).toStrictEqual([items[1], items[0], items[2]])
     })
   })
 
   describe('ApplyPaginate method', () => {})
+
   describe('Sort method', () => {})
 })
