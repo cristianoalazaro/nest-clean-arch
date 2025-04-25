@@ -35,7 +35,10 @@ export abstract class InMemorySearchableRepository<E extends Entity>
     })
   }
 
-  protected async applyFilter(items: E[], filter: string | null): Promise<E[]>
+  protected abstract applyFilter(
+    items: E[],
+    filter: string | null,
+  ): Promise<E[]>
 
   protected async applySort(
     items: E[],
