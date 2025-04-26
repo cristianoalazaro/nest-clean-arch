@@ -98,7 +98,39 @@ describe('InMemorySearchableRepository unit tests', () => {
     })
   })
 
-  describe('ApplyPaginate method', () => {})
+  describe('ApplyPaginate method', () => {
+    it('Should paginate items', async () => {
+      const items = [
+        new StubEntity({ name: 'a', price: 50 }),
+        new StubEntity({ name: 'b', price: 50 }),
+        new StubEntity({ name: 'c', price: 50 }),
+        new StubEntity({ name: 'd', price: 50 }),
+        new StubEntity({ name: 'e', price: 50 }),
+        new StubEntity({ name: 'f', price: 50 }),
+        new StubEntity({ name: 'g', price: 50 }),
+      ]
+
+      let paginatedItems = await sut['applyPaginate'](items, 1, 2)
+      expect(paginatedItems).toStrictEqual([items[0], items[1]])
+      expect(paginatedItems).toHaveLength(2)
+
+      paginatedItems = await sut['applyPaginate'](items, 2, 2)
+      expect(paginatedItems).toStrictEqual([items[2], items[3]])
+      expect(paginatedItems).toHaveLength(2)
+
+      paginatedItems = await sut['applyPaginate'](items, 4, 2)
+      expect(paginatedItems).toStrictEqual([items[6]])
+      expect(paginatedItems).toHaveLength(1)
+
+      paginatedItems = await sut['applyPaginate'](items, 1, 10)
+      expect(paginatedItems).toStrictEqual(items)
+      expect(paginatedItems).toHaveLength(7)
+
+      paginatedItems = await sut['applyPaginate'](items, 5, 10)
+      expect(paginatedItems).toStrictEqual([])
+      expect(paginatedItems).toHaveLength(0)
+    })
+  })
 
   describe('Sort method', () => {})
 })
