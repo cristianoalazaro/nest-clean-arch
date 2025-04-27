@@ -1,5 +1,9 @@
 import { Entity } from '../../../entities/entity'
 import { InMemorySearchableRepository } from '../../in-memory-searchable.repository'
+import {
+  SearchParams,
+  SearchResult,
+} from '../../searchable-repository-contract'
 
 type StubEntityProps = {
   name: string
@@ -132,5 +136,74 @@ describe('InMemorySearchableRepository unit tests', () => {
     })
   })
 
-  describe('Sort method', () => {})
+  describe('Search method', () => {
+    it('Should apply only pagination  where the others params are null', async () => {
+      const entity = new StubEntity({ name: 'a', price: 50 })
+      const items = Array(16).fill(entity)
+      sut.items = items
+      const params = await sut.search(new SearchParams())
+      expect(params).toStrictEqual(
+        new SearchResult({
+          items: Array(15).fill(entity),
+          total: 16,
+          currentPage: 1,
+          perPage: 15,
+          sort: null,
+          sortDir: null,
+          filter: null,
+        }),
+      )
+    })
+
+    it('Should apply pagination  and filter', async () => {
+      const items = [
+        new StubEntity({ name: 'test', price: 50 }),
+        new StubEntity({ name: 'a', price: 50 }),
+        new StubEntity({ name: 'TEST', price: 50 }),
+        new StubEntity({ name: 'TeSt', price: 50 }),
+      ]
+
+      sut.items = items
+
+      let params = await sut.search(
+        new SearchParams({
+          filter: 'TEST',
+          page: 1,
+          perPage: 2,
+        }),
+      )
+
+      expect(params).toStrictEqual(
+        new SearchResult({
+          items: [items[0], items[2]],
+          total: 3,
+          currentPage: 1,
+          perPage: 2,
+          sort: null,
+          sortDir: null,
+          filter: 'TEST',
+        }),
+      )
+
+      params = await sut.search(
+        new SearchParams({
+          filter: 'TEST',
+          page: 2,
+          perPage: 2,
+        }),
+      )
+
+      expect(params).toStrictEqual(
+        new SearchResult({
+          items: [items[3]],
+          total: 3,
+          currentPage: 2,
+          perPage: 2,
+          sort: null,
+          sortDir: null,
+          filter: 'TEST',
+        }),
+      )
+    })
+  })
 })
