@@ -205,5 +205,99 @@ describe('InMemorySearchableRepository unit tests', () => {
         }),
       )
     })
+
+    it('Should apply paginate and sort', async () => {
+      const items = [
+        new StubEntity({ name: 'b', price: 50 }),
+        new StubEntity({ name: 'a', price: 50 }),
+        new StubEntity({ name: 'd', price: 50 }),
+        new StubEntity({ name: 'e', price: 50 }),
+        new StubEntity({ name: 'c', price: 50 }),
+      ]
+
+      sut.items = items
+
+      let params = await sut.search(
+        new SearchParams({
+          page: 1,
+          perPage: 2,
+          sort: 'name',
+        }),
+      )
+
+      expect(params).toStrictEqual(
+        new SearchResult({
+          items: [items[3], items[2]],
+          currentPage: 1,
+          perPage: 2,
+          filter: null,
+          sort: 'name',
+          sortDir: 'desc',
+          total: 5,
+        }),
+      )
+
+      params = await sut.search(
+        new SearchParams({
+          page: 2,
+          perPage: 2,
+          sort: 'name',
+        }),
+      )
+
+      expect(params).toStrictEqual(
+        new SearchResult({
+          items: [items[4], items[0]],
+          currentPage: 2,
+          perPage: 2,
+          filter: null,
+          sort: 'name',
+          sortDir: 'desc',
+          total: 5,
+        }),
+      )
+
+      params = await sut.search(
+        new SearchParams({
+          page: 1,
+          perPage: 2,
+          sort: 'name',
+          sortDir: 'asc',
+        }),
+      )
+
+      expect(params).toStrictEqual(
+        new SearchResult({
+          items: [items[1], items[0]],
+          currentPage: 1,
+          perPage: 2,
+          filter: null,
+          sort: 'name',
+          sortDir: 'asc',
+          total: 5,
+        }),
+      )
+
+      params = await sut.search(
+        new SearchParams({
+          page: 3,
+          perPage: 2,
+          sort: 'name',
+          sortDir: 'asc',
+        }),
+      )
+
+      expect(params).toStrictEqual(
+        new SearchResult({
+          items: [items[3]],
+          currentPage: 3,
+          perPage: 2,
+          filter: null,
+          sort: 'name',
+          sortDir: 'asc',
+          total: 5,
+        }),
+      )
+    })
   })
 })
