@@ -3,7 +3,7 @@ import { RepositoryInterface } from './repository-contract'
 
 type SortDirection = 'asc' | 'desc'
 
-type SearchProps<Filter = string> = {
+type SearchProps<Filter> = {
   page?: number
   perPage?: number
   sort?: string | null
@@ -21,14 +21,14 @@ type SearchResultProps<E extends Entity, Filter> = {
   filter: Filter | null
 }
 
-export class SearchParams {
+export class SearchParams<Filter = string> {
   protected _page: number
   protected _perPage: number = 15
   protected _sort: string | null
   protected _sortDir: string | null
-  protected _filter: string | null
+  protected _filter: Filter | null
 
-  constructor(props: SearchProps = {}) {
+  constructor(props: SearchProps<Filter> = {}) {
     this.page = props.page ?? 1
     this.perPage = props.perPage ?? 15
     this.sort = props.sort ?? null
@@ -83,13 +83,15 @@ export class SearchParams {
     this._sortDir = dir !== 'asc' && dir !== 'desc' ? 'desc' : dir
   }
 
-  get filter(): string | null {
+  get filter(): Filter | null {
     return this._filter
   }
 
-  private set filter(value: string | null) {
+  private set filter(value: Filter | null) {
     this._filter =
-      value === null || value === undefined || value === '' ? null : `${value}`
+      value === null || value === undefined || value === ''
+        ? null
+        : (`${value}` as any)
   }
 }
 
@@ -131,7 +133,7 @@ export class SearchResult<E extends Entity, Filter = string> {
 export interface SearchableRepositoryInterface<
   E extends Entity,
   Filter = string,
-  SearchInput = SearchParams,
+  SearchInput = SearchParams<Filter>,
   SearchOutput = SearchResult<E, Filter>,
 > extends RepositoryInterface<E> {
   sortableFields: string[]
