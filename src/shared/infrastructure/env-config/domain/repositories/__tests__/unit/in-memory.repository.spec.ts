@@ -1,5 +1,5 @@
 import { Entity } from '../../../entities/entity'
-import { NotFoundError } from '../../../errrors/not-found-error'
+import { NotFoundError } from '../../../errors/not-found-error'
 import { InMemoryRepository } from '../../in-memory.repository'
 
 type EntityProps = {

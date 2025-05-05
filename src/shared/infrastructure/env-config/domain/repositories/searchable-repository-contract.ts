@@ -1,7 +1,7 @@
 import { Entity } from '../entities/entity'
 import { RepositoryInterface } from './repository-contract'
 
-type SortDirection = 'asc' | 'desc'
+export type SortDirection = 'asc' | 'desc'
 
 type SearchProps<Filter> = {
   page?: number
