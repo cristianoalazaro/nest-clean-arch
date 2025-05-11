@@ -2,7 +2,7 @@ import {
   SearchableRepositoryInterface,
   SearchParams as DefaultSearchParams,
   SearchResult as DefaultSearchResult,
-} from 'src/shared/infrastructure/env-config/domain/repositories/searchable-repository-contract'
+} from 'src/shared/infrastructure/domain/repositories/searchable-repository-contract'
 import { UserEntity } from '../entities/user.entity'
 
 export namespace UserRepository {

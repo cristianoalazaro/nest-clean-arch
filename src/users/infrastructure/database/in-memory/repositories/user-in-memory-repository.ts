@@ -1,7 +1,7 @@
-import { ConflictError } from 'src/shared/infrastructure/env-config/domain/errors/conflict-error'
-import { NotFoundError } from 'src/shared/infrastructure/env-config/domain/errors/not-found-error'
-import { InMemorySearchableRepository } from 'src/shared/infrastructure/env-config/domain/repositories/in-memory-searchable.repository'
-import { SortDirection } from 'src/shared/infrastructure/env-config/domain/repositories/searchable-repository-contract'
+import { ConflictError } from 'src/shared/infrastructure/domain/errors/conflict-error'
+import { NotFoundError } from 'src/shared/infrastructure/domain/errors/not-found-error'
+import { InMemorySearchableRepository } from 'src/shared/infrastructure/domain/repositories/in-memory-searchable.repository'
+import { SortDirection } from 'src/shared/infrastructure/domain/repositories/searchable-repository-contract'
 import { UserEntity } from 'src/users/domain/entities/user.entity'
 import { UserRepository } from 'src/users/domain/repositories/user.repository'
 

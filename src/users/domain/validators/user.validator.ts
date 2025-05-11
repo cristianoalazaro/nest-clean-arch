@@ -7,7 +7,7 @@ import {
   MaxLength,
 } from 'class-validator'
 import { UserProps } from '../entities/user.entity'
-import { ClassValidatorFields } from 'src/shared/infrastructure/env-config/domain/validators/class-validator-fields'
+import { ClassValidatorFields } from 'src/shared/infrastructure/domain/validators/class-validator-fields'
 
 export class UserRules {
   @IsString()
