@@ -3,7 +3,7 @@ import { BadRequestError } from '../errors/bad-request-error'
 import { UserRepository } from 'src/users/domain/repositories/user.repository'
 import { BcryptjsHashProvider } from 'src/users/infrastructure/providers/hash-provider/bcryptjs-hash.provider'
 
-export namespace SignupUseCase {
+export namespace SignUpUseCase {
   export type Input = {
     name: string
     email: string
