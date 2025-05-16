@@ -3,6 +3,7 @@ import { BadRequestError } from '../errors/bad-request-error'
 import { UserRepository } from 'src/users/domain/repositories/user.repository'
 import { BcryptjsHashProvider } from 'src/users/infrastructure/providers/hash-provider/bcryptjs-hash.provider'
 import { UserOutput } from '../dtos/user-output'
+import { UseCase as DefaultUseCase } from 'src/shared/application/usecases/use-case'
 
 export namespace SignUpUseCase {
   export type Input = {
@@ -13,7 +14,7 @@ export namespace SignUpUseCase {
 
   export type Output = UserOutput
 
-  export class UseCase {
+  export class UseCase implements DefaultUseCase<Input, Output> {
     constructor(
       private userRepository: UserRepository.Repository,
       private hashProvider: BcryptjsHashProvider,
