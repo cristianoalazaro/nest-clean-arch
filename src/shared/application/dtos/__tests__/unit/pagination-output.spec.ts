@@ -1,5 +1,4 @@
 import { SearchResult } from 'src/shared/infrastructure/domain/repositories/searchable-repository-contract'
-import { UserOutputMapper } from 'src/users/application/dtos/user-output'
 import { PaginationOutputMapper } from '../../pagination-output'
 
 describe('PaginationOutputMapper unit tests', () => {
