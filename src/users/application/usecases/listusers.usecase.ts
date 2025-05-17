@@ -4,13 +4,9 @@ import {
 } from 'src/shared/application/dtos/pagination-output'
 import { SearchInput } from 'src/shared/application/dtos/search-input'
 import { UseCase as DefaultUseCase } from 'src/shared/application/usecases/use-case'
-import {
-  SearchParams,
-  SearchResult,
-} from 'src/shared/infrastructure/domain/repositories/searchable-repository-contract'
+import { SearchParams } from 'src/shared/infrastructure/domain/repositories/searchable-repository-contract'
 import { UserRepository } from 'src/users/domain/repositories/user.repository'
 import { UserOutput, UserOutputMapper } from '../dtos/user-output'
-import { UserEntity } from 'src/users/domain/entities/user.entity'
 
 export namespace ListUsersUseCase {
   type Input = SearchInput

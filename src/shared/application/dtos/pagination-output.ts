@@ -2,7 +2,7 @@ import { Entity } from 'src/shared/infrastructure/domain/entities/entity'
 import { SearchResult } from 'src/shared/infrastructure/domain/repositories/searchable-repository-contract'
 
 export type PaginationOutput<Item = any> = {
-  items: Item
+  items: Item[]
   total: number
   currentPage: number
   lastPage: number
