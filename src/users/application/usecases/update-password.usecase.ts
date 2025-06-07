@@ -2,7 +2,6 @@ import { UserRepository } from 'src/users/domain/repositories/user.repository'
 import { UserOutput, UserOutputMapper } from '../dtos/user-output'
 import { UseCase as DefaultUseCase } from 'src/shared/application/usecases/use-case'
 import { HashProvider } from 'src/shared/application/providers/hash-provider'
-import { BadRequestError } from 'src/shared/application/errors/bad-request-error'
 import { InvalidPasswordError } from 'src/shared/application/errors/invalid-password-error'
 
 export namespace UpdatePasswordUseCase {
@@ -30,8 +29,8 @@ export namespace UpdatePasswordUseCase {
       }
 
       const checkOldPassword = await this.hashProvider.compareHash(
-        entity.password,
         input.oldPassword,
+        entity.password,
       )
 
       if (!checkOldPassword) {
@@ -41,6 +40,7 @@ export namespace UpdatePasswordUseCase {
       const hashPassword = await this.hashProvider.generateHash(input.password)
 
       entity.updatePassword(hashPassword)
+      await this.userRepository.update(entity)
       return UserOutputMapper.toOuput(entity)
     }
   }
