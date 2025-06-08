@@ -16,7 +16,7 @@ import { HashProvider } from 'src/shared/application/providers/hash-provider'
       useClass: UserInMemoryRepository,
     },
     {
-      provide: 'HashProvide',
+      provide: 'HashProvider',
       useClass: BcryptjsHashProvider,
     },
     {
