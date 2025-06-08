@@ -4,6 +4,7 @@ import { BadRequestError } from 'src/shared/application/errors/bad-request-error
 import { UserInMemoryRepository } from 'src/users/infrastructure/database/in-memory/repositories/user-in-memory-repository'
 import { HashProvider } from 'src/shared/application/providers/hash-provider'
 import { InvalidCredentialError } from 'src/shared/application/errors/invalid-credential-error'
+import { UserRepository } from 'src/users/domain/repositories/user.repository'
 
 export namespace SignInUseCase {
   export type Input = {
@@ -15,7 +16,7 @@ export namespace SignInUseCase {
 
   export class UseCase implements DefaultUseCase<Input, Output> {
     constructor(
-      private readonly userRepository: UserInMemoryRepository,
+      private readonly userRepository: UserRepository.Repository,
       private readonly hashProvider: HashProvider,
     ) {}
 
