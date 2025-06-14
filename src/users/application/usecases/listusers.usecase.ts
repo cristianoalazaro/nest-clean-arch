@@ -9,7 +9,7 @@ import { UserRepository } from 'src/users/domain/repositories/user.repository'
 import { UserOutput, UserOutputMapper } from '../dtos/user-output'
 
 export namespace ListUsersUseCase {
-  type Input = SearchInput
+  export type Input = SearchInput
   type Output = PaginationOutput<UserOutput>
 
   export class UseCase implements DefaultUseCase<Input, Output> {

@@ -5,7 +5,7 @@ import { HashProvider } from 'src/shared/application/providers/hash-provider'
 import { InvalidPasswordError } from 'src/shared/application/errors/invalid-password-error'
 
 export namespace UpdatePasswordUseCase {
-  type Input = {
+  export type Input = {
     id: string
     password: string
     oldPassword: string
