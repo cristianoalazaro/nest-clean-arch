@@ -9,6 +9,9 @@ import { UpdateUserUseCase } from 'src/users/application/usecases/update-user.us
 import { UpdatePasswordDto } from '../../dtos/update-password.dto'
 import { DeleteUserUseCase } from 'src/users/application/usecases/delete-user.usecase'
 import { GetUserUseCase } from 'src/users/application/usecases/getuser.usecase'
+import { ListUsersDto } from '../../dtos/list-users.dto'
+import { ListUsersUseCase } from 'src/users/application/usecases/listusers.usecase'
+import { PaginationOutputMapper } from 'src/shared/application/dtos/pagination-output'
 
 describe('UsersController unit tests', () => {
   let sut: UsersController
@@ -129,5 +132,31 @@ describe('UsersController unit tests', () => {
 
     expect(result).toMatchObject(output)
     expect(mockGetUserUseCase.execute).toHaveBeenCalledWith({ id })
+  })
+
+  it('Should list users', async () => {
+    const searchParams: ListUsersDto = {
+      page: 1,
+      perPage: 15,
+    }
+
+    const output: ListUsersUseCase.Output = {
+      items: [props],
+      total: 1,
+      currentPage: 1,
+      lastPage: 1,
+      perPage: 1,
+    }
+
+    const mockListUserUseCase = {
+      execute: jest.fn().mockResolvedValue(Promise.resolve(output)),
+    }
+
+    sut['listUsersUseCase'] = mockListUserUseCase as any
+
+    const result = await sut.Search(searchParams)
+
+    expect(result).toStrictEqual(output)
+    expect(mockListUserUseCase.execute).toHaveBeenCalledWith(searchParams)
   })
 })
