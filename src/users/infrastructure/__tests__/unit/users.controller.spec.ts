@@ -7,6 +7,7 @@ import { UpdateUserDto } from '../../dtos/update-user.dto'
 import { SignInUseCase } from 'src/users/application/usecases/signin-usecase'
 import { UpdateUserUseCase } from 'src/users/application/usecases/update-user.usercase'
 import { UpdatePasswordDto } from '../../dtos/update-password.dto'
+import { DeleteUserUseCase } from 'src/users/application/usecases/delete-user.usecase'
 
 describe('UsersController unit tests', () => {
   let sut: UsersController
@@ -99,5 +100,19 @@ describe('UsersController unit tests', () => {
       id,
       ...input,
     })
+  })
+
+  it('Should delete a user', async () => {
+    const output = undefined
+    const mockDeleteUserUseCase = {
+      execute: jest.fn().mockResolvedValue(Promise.resolve()),
+    }
+
+    sut['deleteUserUseCase'] = mockDeleteUserUseCase as any
+
+    const result = await sut.remove(id)
+
+    expect(result).toStrictEqual(output)
+    expect(mockDeleteUserUseCase.execute).toHaveBeenCalledWith({ id })
   })
 })
