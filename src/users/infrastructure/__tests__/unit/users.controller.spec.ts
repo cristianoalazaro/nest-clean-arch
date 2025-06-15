@@ -3,6 +3,9 @@ import { UsersController } from '../../users.controller'
 import { UserOutput } from 'src/users/application/dtos/user-output'
 import { SignUpUseCase } from 'src/users/application/usecases/signup.usecase'
 import { SigninDto } from '../../dtos/signin.dto'
+import { UpdateUserDto } from '../../dtos/update-user.dto'
+import { SignInUseCase } from 'src/users/application/usecases/signin-usecase'
+import { UpdateUserUseCase } from 'src/users/application/usecases/update-user.usercase'
 
 describe('UsersController unit tests', () => {
   let sut: UsersController
@@ -48,7 +51,7 @@ describe('UsersController unit tests', () => {
 
   it('Should authenticate a user', async () => {
     const input: SigninDto = { email: 'test@name.com', password: '123456' }
-    const output: UserOutput = props
+    const output: SignInUseCase.Output = props
     const mockSigninUseCase = {
       execute: jest.fn().mockResolvedValue(Promise.resolve(output)),
     }
@@ -59,5 +62,20 @@ describe('UsersController unit tests', () => {
 
     expect(result).toMatchObject(output)
     expect(mockSigninUseCase.execute).toHaveBeenCalledWith(input)
+  })
+
+  it('Should update a user', async () => {
+    const input: UpdateUserDto = { name: 'Test Name Altered' }
+    const output: UpdateUserUseCase.Output = props
+    const mockUpdateUserUseCase = {
+      execute: jest.fn().mockResolvedValue(Promise.resolve(output)),
+    }
+
+    sut['updateUserUseCase'] = mockUpdateUserUseCase as any
+
+    const result = await sut.update(id, input)
+
+    expect(result).toMatchObject(output)
+    expect(mockUpdateUserUseCase.execute).toHaveBeenCalledWith({ id, ...input })
   })
 })
