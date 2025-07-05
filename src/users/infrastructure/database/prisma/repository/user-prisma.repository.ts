@@ -1,6 +1,8 @@
 import { PrismaService } from 'src/shared/infrastructure/database/prisma/prisma.service'
 import { UserEntity } from 'src/users/domain/entities/user.entity'
 import { UserRepository } from 'src/users/domain/repositories/user.repository'
+import { UserModelMapper } from '../models/user-model.mapper'
+import { NotFoundError } from 'src/shared/infrastructure/domain/errors/not-found-error'
 
 export class UserPrismaRepository implements UserRepository.Repository {
   sortableFields: string[]
@@ -22,7 +24,7 @@ export class UserPrismaRepository implements UserRepository.Repository {
     throw new Error('Method not implemented.')
   }
   findById(id: string): Promise<UserEntity> {
-    throw new Error('Method not implemented.')
+    return this._get(id)
   }
   findAll(): Promise<UserEntity[]> {
     throw new Error('Method not implemented.')
@@ -32,5 +34,17 @@ export class UserPrismaRepository implements UserRepository.Repository {
   }
   delete(id: string): Promise<void> {
     throw new Error('Method not implemented.')
+  }
+
+  async _get(id: string): Promise<UserEntity> {
+    const user = await this.prismaService.user.findUnique({
+      where: { id },
+    })
+
+    if (!user) {
+      throw new NotFoundError(`User not found using ID ${id}`)
+    }
+
+    return UserModelMapper.toEntity(user)
   }
 }
