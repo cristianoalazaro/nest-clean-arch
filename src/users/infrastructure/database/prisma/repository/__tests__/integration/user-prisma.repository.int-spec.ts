@@ -96,5 +96,54 @@ describe('UserPrismaRepository integration tests', () => {
         expect(`test${index + 1}@mail.com`).toStrictEqual(item.email)
       })
     })
+
+    it('Should search using filter, sort and pagination', async () => {
+      const createdAt = new Date()
+      const entities: UserEntity[] = []
+      const arrange = ['test', 'a', 'TEST', 'b', 'TeSt']
+      arrange.forEach((element, index) => {
+        entities.push(
+          new UserEntity({
+            ...UserDataBuilder({ name: element }),
+            createdAt: new Date(createdAt.getTime() + index),
+          }),
+        )
+      })
+
+      await prismaService.user.createMany({
+        data: entities.map(item => item.toJson()),
+      })
+
+      const searchOutput1 = await sut.search(
+        new UserRepository.SearchParams({
+          page: 1,
+          perPage: 2,
+          sort: 'name',
+          sortDir: 'asc',
+          filter: 'TEST',
+        }),
+      )
+
+      expect(searchOutput1.items[0].toJson()).toMatchObject(
+        entities[0].toJson(),
+      )
+      expect(searchOutput1.items[1].toJson()).toMatchObject(
+        entities[4].toJson(),
+      )
+
+      const searchOutput2 = await sut.search(
+        new UserRepository.SearchParams({
+          page: 2,
+          perPage: 2,
+          sort: 'name',
+          sortDir: 'asc',
+          filter: 'TEST',
+        }),
+      )
+
+      expect(searchOutput2.items[0].toJson()).toMatchObject(
+        entities[2].toJson(),
+      )
+    })
   })
 })
