@@ -13,4 +13,7 @@ export default {
   collectCoverageFrom: ['**/*.(t|j)s'],
   coverageDirectory: '../coverage',
   testEnvironment: 'node',
+  transformIgnorePatterns: [
+    '/node_modules/(?!(?:@faker-js/faker|uuid|zod|date-fns)/)',
+  ],
 }
