@@ -40,4 +40,32 @@ describe('UserEntity unit tests', () => {
     expect(sut.props.createdAt).toBeDefined()
     expect(sut.props.createdAt).toBeInstanceOf(Date)
   })
+
+  it('Setter of name field', () => {
+    const updatedName = 'Test Update Name'
+    sut['name'] = updatedName
+
+    expect(sut.props.name).toStrictEqual(updatedName)
+  })
+
+  it('Setter of password field', () => {
+    const updatedpassword = '123123'
+    sut['password'] = updatedpassword
+
+    expect(sut.props.password).toStrictEqual(updatedpassword)
+  })
+
+  it('Should update the name of the field', () => {
+    const updatedName = 'Test Update Name'
+    sut.updateName(updatedName)
+
+    expect(sut.props.name).toStrictEqual(updatedName)
+  })
+
+  it('Should update the password of the field', () => {
+    const updatedPassword = '123456'
+    sut.updatePassword(updatedPassword)
+
+    expect(sut.props.password).toStrictEqual(updatedPassword)
+  })
 })

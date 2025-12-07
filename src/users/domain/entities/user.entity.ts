@@ -29,7 +29,7 @@ export class UserEntity extends Entity<UserProps> {
   }
 
   private set name(value) {
-    this.name = value
+    this.props.name = value
   }
 
   get email() {
@@ -41,7 +41,7 @@ export class UserEntity extends Entity<UserProps> {
   }
 
   private set password(value) {
-    this.password = value
+    this.props.password = value
   }
 
   get createdAt() {
