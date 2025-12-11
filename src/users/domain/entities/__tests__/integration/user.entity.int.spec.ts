@@ -59,9 +59,12 @@ describe('UserEntity integration tests', () => {
       expect(() => new UserEntity(props)).toThrow(EntityValidationError)
     })
 
-    it('Shoud not throw an error', () => {
-      props = { ...UserDataBuilder({}), name: 'Test Name' }
-      expect(() => new UserEntity(props)).not.toThrow(EntityValidationError)
+    it('Shoud create a valid user', () => {
+      props = { ...UserDataBuilder({}), createdAt: null as any }
+      expect(() => new UserEntity(props)).not.toThrow()
+
+      props = UserDataBuilder({})
+      expect(() => new UserEntity(props)).not.toThrow()
     })
   })
 })
