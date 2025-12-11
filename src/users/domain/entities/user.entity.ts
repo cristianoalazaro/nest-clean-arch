@@ -29,7 +29,7 @@ export class UserEntity extends Entity<UserProps> {
   }
 
   get name() {
-    return this.name
+    return this.props.name
   }
 
   private set name(value) {
@@ -37,11 +37,11 @@ export class UserEntity extends Entity<UserProps> {
   }
 
   get email() {
-    return this.email
+    return this.props.email
   }
 
   get password() {
-    return this.password
+    return this.props.password
   }
 
   private set password(value) {
@@ -49,7 +49,7 @@ export class UserEntity extends Entity<UserProps> {
   }
 
   get createdAt() {
-    return this.createdAt
+    return this.props.createdAt
   }
 
   static validate(data: UserProps) {
