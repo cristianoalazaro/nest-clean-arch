@@ -1,5 +1,12 @@
 import { ClassValidatorFields } from '@/shared/domain/validators/class-validator-fields'
-import { IsDate, IsNotEmpty, IsString, MaxLength } from 'class-validator'
+import {
+  IsDate,
+  IsEmail,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  MaxLength,
+} from 'class-validator'
 
 export class UserRules {
   @IsString()
@@ -8,6 +15,7 @@ export class UserRules {
   name: string
 
   @IsString()
+  @IsEmail()
   @MaxLength(255)
   @IsNotEmpty()
   email: string
@@ -18,6 +26,7 @@ export class UserRules {
   password: string
 
   @IsDate()
+  @IsOptional()
   createdAt?: Date
 
   constructor({ name, email, password, createdAt }: UserRules) {
