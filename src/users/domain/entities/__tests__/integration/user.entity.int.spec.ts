@@ -6,14 +6,34 @@ let props: UserProps
 
 describe('UserEntity integration tests', () => {
   describe('Constructor method', () => {
-    it('Shoud throw an error', () => {
+    it('Shoud throw an error when creating a user with invalid name', () => {
       props = { ...UserDataBuilder({}), name: null as any }
       expect(() => new UserEntity(props)).toThrow(EntityValidationError)
 
       props = { ...UserDataBuilder({}), name: '' }
       expect(() => new UserEntity(props)).toThrow(EntityValidationError)
 
+      props = { ...UserDataBuilder({}), name: 10 as any }
+      expect(() => new UserEntity(props)).toThrow(EntityValidationError)
+
       props = { ...UserDataBuilder({}), name: 'a'.repeat(256) }
+      expect(() => new UserEntity(props)).toThrow(EntityValidationError)
+    })
+
+    it('Shoud throw an error when creating a user with invalid email', () => {
+      props = { ...UserDataBuilder({}), email: null as any }
+      expect(() => new UserEntity(props)).toThrow(EntityValidationError)
+
+      props = { ...UserDataBuilder({}), email: '' }
+      expect(() => new UserEntity(props)).toThrow(EntityValidationError)
+
+      props = { ...UserDataBuilder({}), email: 10 as any }
+      expect(() => new UserEntity(props)).toThrow(EntityValidationError)
+
+      props = { ...UserDataBuilder({}), email: 'a'.repeat(256) }
+      expect(() => new UserEntity(props)).toThrow(EntityValidationError)
+
+      props = { ...UserDataBuilder({}), email: 'test email'.repeat(256) }
       expect(() => new UserEntity(props)).toThrow(EntityValidationError)
     })
 
