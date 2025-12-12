@@ -2,7 +2,7 @@ import { Entity } from '../entities/entity'
 import { NotFoundError } from '../errors/not-found-error'
 import { RepositoryContract } from './repository-contract'
 
-export class InMemoryRepository<
+export abstract class InMemoryRepository<
   E extends Entity,
 > implements RepositoryContract<E> {
   items: E[] = []
