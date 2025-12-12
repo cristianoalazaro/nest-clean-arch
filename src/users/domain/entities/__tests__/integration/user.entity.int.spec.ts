@@ -67,4 +67,42 @@ describe('UserEntity integration tests', () => {
       expect(() => new UserEntity(props)).not.toThrow()
     })
   })
+
+  describe('Update method', () => {
+    it('Should throw an error when update a user with an invalid name', () => {
+      const sut = new UserEntity(UserDataBuilder({}))
+      expect(() => sut.updateName(null as any)).toThrow(EntityValidationError)
+      expect(() => sut.updateName('')).toThrow(EntityValidationError)
+      expect(() => sut.updateName(10 as any)).toThrow(EntityValidationError)
+      expect(() => sut.updateName('a'.repeat(256))).toThrow(
+        EntityValidationError,
+      )
+    })
+
+    it('Should update the name of a user entity', () => {
+      const sut = new UserEntity(UserDataBuilder({}))
+      expect(() => sut.updateName('Test Name')).not.toThrow(
+        EntityValidationError,
+      )
+    })
+
+    it('Should throw an error when update a user with an invalid password', () => {
+      const sut = new UserEntity(UserDataBuilder({}))
+      expect(() => sut.updatePassword(null as any)).toThrow(
+        EntityValidationError,
+      )
+      expect(() => sut.updatePassword('')).toThrow(EntityValidationError)
+      expect(() => sut.updatePassword(10 as any)).toThrow(EntityValidationError)
+      expect(() => sut.updatePassword('a'.repeat(101))).toThrow(
+        EntityValidationError,
+      )
+    })
+
+    it('Should update the password of a user entity', () => {
+      const sut = new UserEntity(UserDataBuilder({}))
+      expect(() => sut.updatePassword('Test Password')).not.toThrow(
+        EntityValidationError,
+      )
+    })
+  })
 })
