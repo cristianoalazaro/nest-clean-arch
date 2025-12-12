@@ -1,10 +1,10 @@
 import { Entity } from '../entities/entity'
 import { NotFoundError } from '../errors/not-found-error'
-import { RepositoryContract } from './repository-contract'
+import { RepositoryInterface } from './repository-contract'
 
 export abstract class InMemoryRepository<
   E extends Entity,
-> implements RepositoryContract<E> {
+> implements RepositoryInterface<E> {
   items: E[] = []
 
   async insert(entity: E): Promise<void> {
