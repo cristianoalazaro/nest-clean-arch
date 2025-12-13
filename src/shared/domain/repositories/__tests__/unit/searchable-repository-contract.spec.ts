@@ -1,4 +1,7 @@
-import { SearchParams } from '../../searchable-repository-contract'
+import {
+  SearchParams,
+  SearchResult,
+} from '../../searchable-repository-contract'
 
 describe('Searchable Repository unit tests', () => {
   describe('SearchParams', () => {
@@ -113,6 +116,76 @@ describe('Searchable Repository unit tests', () => {
       params.forEach(i => {
         expect(new SearchParams({ filter: i.filter }).filter).toBe(i.expected)
       })
+    })
+  })
+
+  describe('SearchResult', () => {
+    it('Constructor props', () => {
+      let sut = new SearchResult({
+        items: ['item 1', 'item 2', 'item 3', 'item 4'] as any,
+        total: 4,
+        currentPage: 1,
+        perPage: 2,
+        sort: null,
+        sortDir: null,
+        filter: null,
+      })
+
+      expect(sut.toJSON()).toStrictEqual({
+        items: ['item 1', 'item 2', 'item 3', 'item 4'] as any,
+        total: 4,
+        currentPage: 1,
+        perPage: 2,
+        lastPage: 2,
+        sort: null,
+        sortDir: null,
+        filter: null,
+      })
+
+      sut = new SearchResult({
+        items: ['item 1', 'item 2', 'item 3', 'item 4'] as any,
+        total: 4,
+        currentPage: 1,
+        perPage: 2,
+        sort: 'name',
+        sortDir: 'asc',
+        filter: 'test' as any,
+      })
+
+      expect(sut.toJSON()).toStrictEqual({
+        items: ['item 1', 'item 2', 'item 3', 'item 4'] as any,
+        total: 4,
+        currentPage: 1,
+        perPage: 2,
+        lastPage: 2,
+        sort: 'name',
+        sortDir: 'asc',
+        filter: 'test',
+      })
+
+      sut = new SearchResult({
+        items: ['item 1', 'item 2', 'item 3', 'item 4'] as any,
+        total: 4,
+        currentPage: 1,
+        perPage: 10,
+        sort: 'name',
+        sortDir: 'asc',
+        filter: 'test' as any,
+      })
+
+      expect(sut.toJSON().lastPage).toBe(1)
+
+      sut = new SearchResult({
+        items: ['item 1', 'item 2', 'item 3', 'item 4', 'item 5'] as any,
+        total: 5,
+        currentPage: 1,
+        perPage: 2,
+        sort: 'name',
+        sortDir: 'asc',
+        filter: 'test' as any,
+      })
+
+      expect(sut.toJSON().lastPage).toBe(3)
     })
   })
 })
