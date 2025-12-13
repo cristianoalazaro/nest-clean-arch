@@ -65,17 +65,17 @@ export class SearchParams {
       value === null || value === undefined || value === '' ? null : `${value}`
   }
 
-  get sortDir(): SortOrder {
-    return this._sortDir ?? 'desc'
+  get sortDir(): SortOrder | null {
+    return this._sortDir
   }
 
   private set sortDir(value: SortOrder | null) {
-    if (!this._sort || !value) {
+    if (!this.sort) {
       this._sortDir = null
       return
     }
 
-    const dir = `${value.toLowerCase()}`
+    const dir = `${value}`.toLowerCase()
 
     this._sortDir = dir !== 'asc' && dir !== 'desc' ? 'desc' : dir
   }
