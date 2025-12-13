@@ -6,9 +6,9 @@ type SortOrder = 'asc' | 'desc'
 type SearchProps<Filter = string> = {
   page?: number
   perPage?: number
-  sort?: string
-  sortDir?: SortOrder
-  filter?: Filter
+  sort?: string | null
+  sortDir?: SortOrder | null
+  filter?: Filter | null
 }
 
 export class SearchParams {
@@ -18,12 +18,12 @@ export class SearchParams {
   protected _sortDir: SortOrder | null
   protected _filter: string | null
 
-  constructor(props: SearchProps) {
-    this._page = props.page ?? 1
-    this._perPage = props.perPage ?? this._perPage
-    this._sort = props.sort ?? null
-    this._sortDir = props.sortDir ?? null
-    this._filter = props.filter ?? null
+  constructor(props: SearchProps = {}) {
+    this.page = props.page ?? 1
+    this.perPage = props.perPage ?? this._perPage
+    this.sort = props.sort ?? null
+    this.sortDir = props.sortDir ?? null
+    this.filter = props.filter ?? null
   }
 
   get page() {
@@ -44,7 +44,7 @@ export class SearchParams {
   }
 
   private set perPage(value: number) {
-    let _perPage = +value
+    let _perPage = value === (true as any) ? this._perPage : +value
 
     if (
       Number.isNaN(_perPage) ||
@@ -60,7 +60,7 @@ export class SearchParams {
     return this._sort
   }
 
-  private set sort(value: string) {
+  private set sort(value: string | null) {
     this._sort =
       value === null || value === undefined || value === '' ? null : `${value}`
   }
@@ -69,8 +69,8 @@ export class SearchParams {
     return this._sortDir ?? 'desc'
   }
 
-  private set sortDir(value: SortOrder) {
-    if (!this._sort) {
+  private set sortDir(value: SortOrder | null) {
+    if (!this._sort || !value) {
       this._sortDir = null
       return
     }
@@ -84,7 +84,7 @@ export class SearchParams {
     return this._filter
   }
 
-  private set filter(value: string) {
+  private set filter(value: string | null) {
     this._filter =
       value === null || value === undefined || value === '' ? null : `${value}`
   }
