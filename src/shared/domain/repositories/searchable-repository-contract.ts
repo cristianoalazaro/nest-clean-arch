@@ -30,31 +30,64 @@ export class SearchParams {
     return this._page
   }
 
-  private set page(value: number) {}
+  private set page(value: number) {
+    let _page = +value
+
+    if (Number.isNaN(_page) || _page <= 0 || parseInt(_page as any) !== _page) {
+      _page = 1
+    }
+    this._page = _page
+  }
 
   get perPage() {
     return this._perPage
   }
 
-  private set perPage(value: number) {}
+  private set perPage(value: number) {
+    let _perPage = +value
+
+    if (
+      Number.isNaN(_perPage) ||
+      _perPage <= 0 ||
+      parseInt(_perPage as any) !== _perPage
+    ) {
+      _perPage = this._perPage
+    }
+    this._perPage = _perPage
+  }
 
   get sort(): string | null {
     return this._sort
   }
 
-  private set sort(value: string) {}
+  private set sort(value: string) {
+    this._sort =
+      value === null || value === undefined || value === '' ? null : `${value}`
+  }
 
   get sortDir(): SortOrder {
     return this._sortDir ?? 'desc'
   }
 
-  private set sortDir(value: SortOrder) {}
+  private set sortDir(value: SortOrder) {
+    if (!this._sort) {
+      this._sortDir = null
+      return
+    }
+
+    const dir = `${value.toLowerCase()}`
+
+    this._sortDir = dir !== 'asc' && dir !== 'desc' ? 'desc' : dir
+  }
 
   get filter(): string | null {
     return this._filter
   }
 
-  private set filter(value: string) {}
+  private set filter(value: string) {
+    this._filter =
+      value === null || value === undefined || value === '' ? null : `${value}`
+  }
 }
 
 export interface SearchableRepositoryInterface<
