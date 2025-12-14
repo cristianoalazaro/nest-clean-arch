@@ -6,7 +6,7 @@ import {
   SearchResult,
 } from './searchable-repository-contract'
 
-export abstract class InMemorySearchRepository<E extends Entity>
+export abstract class InMemorySearchableRepository<E extends Entity>
   extends InMemoryRepository<E>
   implements SearchableRepositoryInterface<E, any, any>
 {
