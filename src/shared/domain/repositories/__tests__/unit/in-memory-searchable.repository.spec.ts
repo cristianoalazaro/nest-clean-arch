@@ -1,5 +1,6 @@
 import { Entity } from '@/shared/domain/entities/entity'
 import { InMemorySearchableRepository } from '../../in-memory-searchable.repository'
+import { SearchParams } from '../../searchable-repository-contract'
 
 type StubEntityProps = {
   name: string
@@ -96,7 +97,33 @@ describe('InMemorySearchableRepository unit tests', () => {
     })
   })
 
-  describe('applyPagination', () => {})
+  describe('applyPagination', () => {
+    it('Should paginate items', async () => {
+      items = [
+        new StubEntity({ name: 'a', price: 50 }),
+        new StubEntity({ name: 'b', price: 50 }),
+        new StubEntity({ name: 'c', price: 50 }),
+        new StubEntity({ name: 'd', price: 50 }),
+        new StubEntity({ name: 'e', price: 50 }),
+      ]
+
+      let paginatedItems = await sut['applyPaginate'](items, 1, 2)
+      expect(paginatedItems).toHaveLength(2)
+      expect(paginatedItems).toEqual([items[0], items[1]])
+
+      paginatedItems = await sut['applyPaginate'](items, 2, 2)
+      expect(paginatedItems).toHaveLength(2)
+      expect(paginatedItems).toEqual([items[2], items[3]])
+
+      paginatedItems = await sut['applyPaginate'](items, 3, 2)
+      expect(paginatedItems).toHaveLength(1)
+      expect(paginatedItems).toEqual([items[4]])
+
+      paginatedItems = await sut['applyPaginate'](items, 4, 2)
+      expect(paginatedItems).toHaveLength(0)
+      expect(paginatedItems).toEqual([])
+    })
+  })
 
   describe('search', () => {})
 })
