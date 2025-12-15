@@ -1,6 +1,9 @@
 import { Entity } from '@/shared/domain/entities/entity'
 import { InMemorySearchableRepository } from '../../in-memory-searchable.repository'
-import { SearchParams } from '../../searchable-repository-contract'
+import {
+  SearchParams,
+  SearchResult,
+} from '../../searchable-repository-contract'
 
 type StubEntityProps = {
   name: string
@@ -125,5 +128,63 @@ describe('InMemorySearchableRepository unit tests', () => {
     })
   })
 
-  describe('search', () => {})
+  describe('search', () => {
+    it('Should apply only a pagination when the other params are null', async () => {
+      const entity = new StubEntity({ name: 'value name', price: 50 })
+      items = Array(16).fill(entity)
+      sut.items = items
+
+      expect(await sut.search(new SearchParams())).toStrictEqual(
+        new SearchResult({
+          items: Array(15).fill(entity),
+          total: 15,
+          currentPage: 1,
+          perPage: 15,
+          sort: null,
+          sortDir: null,
+          filter: null,
+        }),
+      )
+    })
+
+    it('Should apply pagination with filter', async () => {
+      const entity = new StubEntity({ name: 'value name', price: 50 })
+      items = [
+        new StubEntity({ name: 'test', price: 50 }),
+        new StubEntity({ name: 'a', price: 50 }),
+        new StubEntity({ name: 'TEST', price: 50 }),
+        new StubEntity({ name: 'TeSt', price: 50 }),
+      ]
+
+      let params = new SearchParams({ page: 1, perPage: 2, filter: 'TEST' })
+
+      sut.items = items
+
+      expect(await sut.search(params)).toStrictEqual(
+        new SearchResult({
+          items: [items[0], items[2]],
+          total: 2,
+          currentPage: 1,
+          perPage: 2,
+          sort: null,
+          sortDir: null,
+          filter: 'TEST',
+        }),
+      )
+
+      params = new SearchParams({ page: 2, perPage: 2, filter: 'TEST' })
+
+      expect(await sut.search(params)).toStrictEqual(
+        new SearchResult({
+          items: [items[3]],
+          total: 1,
+          currentPage: 2,
+          perPage: 2,
+          sort: null,
+          sortDir: null,
+          filter: 'TEST',
+        }),
+      )
+    })
+  })
 })
