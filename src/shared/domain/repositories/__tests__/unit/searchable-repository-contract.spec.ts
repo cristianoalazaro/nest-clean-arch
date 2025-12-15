@@ -5,7 +5,7 @@ import {
 
 describe('Searchable Repository unit tests', () => {
   describe('SearchParams', () => {
-    let sut: SearchParams
+    let sut: SearchParams<{}>
 
     it('page prop', () => {
       const params = [

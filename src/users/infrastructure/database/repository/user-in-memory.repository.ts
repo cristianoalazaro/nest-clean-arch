@@ -6,7 +6,7 @@ import { UserRepositoryInterface } from '@/users/repositories/user.repository.in
 
 export class UserInMemoryRepository
   extends InMemorySearchableRepository<UserEntity>
-  implements UserRepositoryInterface
+  implements UserRepositoryInterface.Repository
 {
   protected applyFilter(
     items: UserEntity[],
