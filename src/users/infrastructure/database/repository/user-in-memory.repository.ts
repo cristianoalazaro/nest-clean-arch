@@ -32,7 +32,9 @@ export class UserInMemoryRepository
     if (!filter) {
       return items
     }
-    return items.filter(item => item.props.name === filter.toLowerCase())
+    return items.filter(
+      item => item.props.name.toLowerCase() === filter.toLowerCase(),
+    )
   }
 
   protected async applySort(
