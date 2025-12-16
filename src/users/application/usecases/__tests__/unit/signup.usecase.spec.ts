@@ -1,4 +1,3 @@
-import { UserRepositoryInterface } from '@/users/repositories/user.repository.interface'
 import { SignupUseCase } from '../../signup.usecase'
 import { UserInMemoryRepository } from '@/users/infrastructure/database/repository/user-in-memory.repository'
 import { BcryptHashProvider } from '@/users/infrastructure/providers/hashProvider/bcryptjs-hash.provider'
