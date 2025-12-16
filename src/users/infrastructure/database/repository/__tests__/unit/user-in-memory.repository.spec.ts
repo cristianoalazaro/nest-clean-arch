@@ -63,13 +63,59 @@ describe('UserInMemoryRepository unit tests', () => {
         new UserEntity(UserDataBuilder({ name: 'fake' })),
       ]
 
-      items.forEach(async item => await sut.insert(item))
-
+      const filteredItems = await sut['applyFilter'](items, 'TEST')
       const result = await sut.findAll()
       const spyFilterMethod = jest.spyOn(result, 'filter')
-      const filteredItems = await sut['applyFilter'](result, 'TEST')
       expect(filteredItems).toStrictEqual([items[0], items[1]])
       expect(spyFilterMethod).not.toHaveBeenCalledWith(1)
+    })
+
+    it('Should sort by createdAt when sort param is null', async () => {
+      const createdAt = new Date()
+
+      const items = [
+        new UserEntity(UserDataBuilder({ name: 'Test', createdAt })),
+        new UserEntity(
+          UserDataBuilder({
+            name: 'TEST',
+            createdAt: new Date(createdAt.getTime() + 1),
+          }),
+        ),
+        new UserEntity(
+          UserDataBuilder({
+            name: 'fake',
+            createdAt: new Date(createdAt.getTime() + 2),
+          }),
+        ),
+      ]
+
+      const sortedItems = await sut['applySort'](items, null, null)
+      expect(sortedItems).toStrictEqual([items[2], items[1], items[0]])
+    })
+
+    it('Should sort by name', async () => {
+      const items = [
+        new UserEntity(UserDataBuilder({ name: 'Test' })),
+        new UserEntity(
+          UserDataBuilder({
+            name: 'TEST',
+          }),
+        ),
+        new UserEntity(
+          UserDataBuilder({
+            name: 'fake',
+          }),
+        ),
+      ]
+
+      let sortedItems = await sut['applySort'](items, 'name', null)
+      expect(sortedItems).toStrictEqual([items[2], items[0], items[1]])
+
+      sortedItems = await sut['applySort'](items, 'name', 'desc')
+      expect(sortedItems).toStrictEqual([items[2], items[0], items[1]])
+
+      sortedItems = await sut['applySort'](items, 'name', 'asc')
+      expect(sortedItems).toStrictEqual([items[1], items[0], items[2]])
     })
   })
 })
