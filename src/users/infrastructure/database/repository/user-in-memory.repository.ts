@@ -14,8 +14,7 @@ export class UserInMemoryRepository
   async findByEmail(email: string): Promise<UserEntity> {
     const entity = this.items.find(item => item.email === email)
 
-    if (!entity)
-      throw new NotFoundError(`Entity not found using e-mail: ${email}!`)
+    if (!entity) throw new NotFoundError(`Entity not found using e-mail: ${email}!`)
 
     return entity
   }
@@ -32,9 +31,7 @@ export class UserInMemoryRepository
     if (!filter) {
       return items
     }
-    return items.filter(
-      item => item.props.name.toLowerCase() === filter.toLowerCase(),
-    )
+    return items.filter(item => item.props.name.toLowerCase().includes(filter.toLowerCase()))
   }
 
   protected async applySort(
