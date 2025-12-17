@@ -5,7 +5,7 @@ import { UpdateUserUseCase } from '../../updateUser.usecase'
 import { UserEntity } from '@/users/domain/entities/user.entity'
 import { NotFoundError } from '@/shared/domain/errors/not-found-error'
 
-describe('SignUpUseCase unit tests', () => {
+describe('UpdateUserUseCase unit tests', () => {
   let sut: UpdateUserUseCase.UseCase
   let repository: UserInMemoryRepository
 
