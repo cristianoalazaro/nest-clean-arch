@@ -8,6 +8,7 @@ import { UpdateUserDto } from '../../dtos/update-user.dto'
 import { UpdateUserUseCase } from '@/users/application/usecases/updateUser.usecase'
 import { UpdatePasswordUserDto } from '../../dtos/updatePassword-user.dto'
 import { UpdatePasswordUserUseCase } from '@/users/application/usecases/updatePasswordUser.usecase'
+import { DeleteUserUseCase } from '@/users/application/usecases/deleteUser.usecase'
 
 describe('UsersController unit tests', () => {
   let sut: UsersController
@@ -94,5 +95,18 @@ describe('UsersController unit tests', () => {
     const result = await sut.updatePassword(id, input)
     expect(result).toMatchObject(output)
     expect(updatePasswordUserUseCaseMock.execute).toHaveBeenCalledWith({ id, ...input })
+  })
+
+  it('should delete a user', async () => {
+    const output = undefined
+    const deleteUserUseCaseMock = {
+      execute: jest.fn().mockResolvedValue(Promise.resolve(output)),
+    }
+
+    sut['deleteUserUseCase'] = deleteUserUseCaseMock as any
+
+    const result = await sut.remove(id)
+    expect(result).toStrictEqual(output)
+    expect(deleteUserUseCaseMock.execute).toHaveBeenCalledWith({ id })
   })
 })
