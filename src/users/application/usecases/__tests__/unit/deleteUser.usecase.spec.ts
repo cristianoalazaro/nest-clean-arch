@@ -1,7 +1,6 @@
 import { UserInMemoryRepository } from '@/users/infrastructure/database/repository/user-in-memory.repository'
 import { UserDataBuilder } from '@/users/domain/entities/__tests__/testing/helpers/user-data-builder'
 import { BadRequestError } from '@/shared/application/errors/bad-request-error'
-import { UpdateUserUseCase } from '../../updateUser.usecase'
 import { UserEntity } from '@/users/domain/entities/user.entity'
 import { NotFoundError } from '@/shared/domain/errors/not-found-error'
 import { DeleteUserUseCase } from '../../deleteUser.usecase'
