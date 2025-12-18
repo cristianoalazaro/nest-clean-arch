@@ -1,0 +1,59 @@
+## Health check
+GET http://localhost:3000
+###
+
+## List users
+GET  http://localhost:3000/users?page=1&perPage=15&sort=name&sortDir=asc
+Content-Type: application/json
+###
+
+## get user by id
+GET  http://localhost:3000/users/4360c7ac-2982-4455-91a5-9100c3f291f6
+Content-Type: application/json
+###
+
+## Create user
+POST http://localhost:3000/users
+Content-Type: application/json
+
+{
+  "name": "Test Name",
+  "email": "test@test.com",
+  "password": "123456"
+}
+###
+
+## login
+POST http://localhost:3000/users/login
+Content-Type: application/json
+
+{
+  "email": "test@test.com",
+  "password": "123444"
+}
+###
+
+## update name
+PUT  http://localhost:3000/users/156d4bcc-1659-4da9-a4e9-a7b8e0d28da5
+Content-Type: application/json
+
+{
+  "id": "156d4bcc-1659-4da9-a4e9-a7b8e0d28da5",
+  "name": "Test Name 2 - alt"
+}
+###
+
+## update password
+PATCH   http://localhost:3000/users/156d4bcc-1659-4da9-a4e9-a7b8e0d28da5
+Content-Type: application/json
+
+{
+  "id": "156d4bcc-1659-4da9-a4e9-a7b8e0d28da5",
+  "oldPassword": "123456",
+  "password": "123444"
+}
+###
+
+## delete user
+DELETE    http://localhost:3000/users/85296661-0f53-4918-abdf-e06a56553371
+###

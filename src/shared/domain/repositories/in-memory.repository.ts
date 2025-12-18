@@ -2,9 +2,7 @@ import { Entity } from '../entities/entity'
 import { NotFoundError } from '../errors/not-found-error'
 import { RepositoryInterface } from './repository-contract'
 
-export abstract class InMemoryRepository<
-  E extends Entity,
-> implements RepositoryInterface<E> {
+export abstract class InMemoryRepository<E extends Entity> implements RepositoryInterface<E> {
   items: E[] = []
 
   async insert(entity: E): Promise<void> {
@@ -20,12 +18,12 @@ export abstract class InMemoryRepository<
   }
 
   async update(entity: E): Promise<void> {
-    const item = await this._get(entity.id)
-    const index = this.items.findIndex(item => item.id === item.id)
+    await this._get(entity.id)
+    const index = this.items.findIndex(item => item.id === entity.id)
     this.items[index] = entity
   }
   async delete(id: string): Promise<void> {
-    const item = await this._get(id)
+    await this._get(id)
     const index = this.items.findIndex(item => item.id === id)
     this.items.splice(index, 1)
   }
