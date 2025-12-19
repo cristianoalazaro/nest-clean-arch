@@ -1,5 +1,5 @@
 import { SignupUseCase } from '../../signup.usecase'
-import { UserInMemoryRepository } from '@/users/infrastructure/database/repository/user-in-memory.repository'
+import { UserInMemoryRepository } from '@/users/infrastructure/database/in-memory/repositories/user-in-memory.repository'
 import { BcryptHashProvider } from '@/users/infrastructure/providers/hashProvider/bcryptjs-hash.provider'
 import { UserDataBuilder } from '@/users/domain/entities/__tests__/testing/helpers/user-data-builder'
 import { ConflictError } from '@/shared/domain/errors/conflict-error'

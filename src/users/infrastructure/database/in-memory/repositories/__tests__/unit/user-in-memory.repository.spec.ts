@@ -1,4 +1,3 @@
-import { ValidationError } from 'class-validator'
 import { UserInMemoryRepository } from '../../user-in-memory.repository'
 import { NotFoundError } from '@/shared/domain/errors/not-found-error'
 import { UserEntity } from '@/users/domain/entities/user.entity'
@@ -24,9 +23,7 @@ describe('UserInMemoryRepository unit tests', () => {
 
       await sut.insert(entity)
 
-      expect((await sut.findByEmail('test@test.com')).toJSON()).toStrictEqual(
-        entity.toJSON(),
-      )
+      expect((await sut.findByEmail('test@test.com')).toJSON()).toStrictEqual(entity.toJSON())
     })
   })
 

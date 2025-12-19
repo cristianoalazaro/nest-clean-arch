@@ -1,4 +1,4 @@
-import { UserInMemoryRepository } from '@/users/infrastructure/database/repository/user-in-memory.repository'
+import { UserInMemoryRepository } from '@/users/infrastructure/database/in-memory/repositories/user-in-memory.repository'
 import { UserDataBuilder } from '@/users/domain/entities/__tests__/testing/helpers/user-data-builder'
 import { GetUserUseCase } from '../../getUser.usecase'
 import { UserEntity } from '@/users/domain/entities/user.entity'
