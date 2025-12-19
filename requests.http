@@ -57,3 +57,8 @@ Content-Type: application/json
 ## delete user
 DELETE    http://localhost:3000/users/85296661-0f53-4918-abdf-e06a56553371
 ###
+
+## Prisma repository
+## find user by id
+GET     http://localhost:3000/users/85296661-0f53-4918-abdf-e06a56553371
+###
