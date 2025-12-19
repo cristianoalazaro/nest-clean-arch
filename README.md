@@ -65,6 +65,12 @@ npx prisma init
 
 # generate prisma types in the project
 npx prisma generate
+
+# Execute migration
+npx dotenv-cli -e .env.development -- npx prisma migrate dev
+
+# Execute prisma studio
+npx prisma studio
 ```
 
 ## Deployment
