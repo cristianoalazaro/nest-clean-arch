@@ -6,6 +6,7 @@ import { DatabaseModule } from '@/shared/infrastructure/database/database.module
 import { NotFoundError } from '@/shared/domain/errors/not-found-error'
 import { UserEntity } from '@/users/domain/entities/user.entity'
 import { UserDataBuilder } from '@/users/domain/entities/__tests__/testing/helpers/user-data-builder'
+import { UserRepositoryInterface } from '@/users/repositories/user.repository.interface'
 
 describe('UserPrismaRepository integration tests', () => {
   let prismaService: PrismaService
@@ -72,5 +73,31 @@ describe('UserPrismaRepository integration tests', () => {
       listEntities.map(entity => entity.toJSON()),
     )
     expect(listUsers).toHaveLength(3)
+  })
+
+  describe('Search method tests', () => {
+    it('Should apply only pagination when the other params are null', async () => {
+      const createdAt = new Date()
+      const entities: UserEntity[] = []
+      const arrange = Array(16).fill(UserDataBuilder({}))
+
+      arrange.forEach((element, index) => {
+        entities.push(
+          new UserEntity({
+            ...element,
+            name: `User ${index}`,
+            email: `user${index}@test.com`,
+            createdAt: new Date(createdAt.getTime() + index),
+          }),
+        )
+      })
+
+      await prismaService.user.createMany({ data: entities.map(entity => entity.toJSON()) })
+      const searchOutput = await sut.search(new UserRepositoryInterface.SearchParams())
+
+      expect(searchOutput).toBeInstanceOf(UserRepositoryInterface.SearchResults)
+      expect(searchOutput.items).toHaveLength(15)
+      expect(searchOutput.total).toEqual(16)
+    })
   })
 })
