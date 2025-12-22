@@ -9,8 +9,9 @@ export class UserPrismaRepository implements UserRepositoryInterface.Repository 
 
   constructor(private prismaService: PrismaService) {}
 
-  findAll(): Promise<UserEntity[]> {
-    throw new Error('Method not implemented.')
+  async findAll(): Promise<UserEntity[]> {
+    const users = await this.prismaService.user.findMany()
+    return users.map(user => UserModelMapper.toEntity(user))
   }
 
   search(
