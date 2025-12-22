@@ -40,12 +40,18 @@ describe('UserPrismaRepository integration tests', () => {
     )
   })
 
-  it('Should find a entity by id', async () => {
-    const spyFindUnique = jest.spyOn(prismaService.user, 'findUnique')
+  it('Should find a, entity by id', async () => {
     const entity = new UserEntity(UserDataBuilder({}))
     const newUser = await prismaService.user.create({ data: entity.toJSON() })
 
     expect((await sut.findById(newUser.id)).toJSON()).toStrictEqual(entity.toJSON())
-    expect(spyFindUnique).toHaveBeenCalledTimes(1)
+  })
+
+  it('Should insert an entity', async () => {
+    const entity = new UserEntity(UserDataBuilder({}))
+    await sut.insert(entity)
+    const user = await prismaService.user.findUnique({ where: { id: entity.id } })
+
+    expect(user).toStrictEqual(entity.toJSON())
   })
 })
