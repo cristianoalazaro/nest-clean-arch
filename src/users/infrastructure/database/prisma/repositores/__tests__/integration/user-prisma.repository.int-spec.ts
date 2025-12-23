@@ -145,4 +145,22 @@ describe('UserPrismaRepository integration tests', () => {
       expect(searchOutputPage2.items[0].toJSON()).toMatchObject(entities[2].toJSON())
     })
   })
+
+  it('Should update an entity', async () => {
+    const entity = new UserEntity(UserDataBuilder({}))
+    await sut.insert(entity)
+    entity.updateName('Altered Name')
+    await sut.update(entity)
+    const updatedUser = await prismaService.user.findUnique({ where: { id: entity.id } })
+
+    expect(updatedUser).toStrictEqual(entity.toJSON())
+    expect(updatedUser?.name).toStrictEqual(entity.name)
+  })
+
+  it('Should throw an error when an entity not found', async () => {
+    const entity = new UserEntity(UserDataBuilder({}))
+    await expect(sut.update(entity)).rejects.toThrow(
+      new NotFoundError(`User not found with ID ${entity.id}`),
+    )
+  })
 })
