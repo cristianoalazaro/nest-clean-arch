@@ -96,8 +96,53 @@ describe('UserPrismaRepository integration tests', () => {
       const searchOutput = await sut.search(new UserRepositoryInterface.SearchParams())
 
       expect(searchOutput).toBeInstanceOf(UserRepositoryInterface.SearchResults)
-      expect(searchOutput.items).toHaveLength(15)
+      expect(searchOutput.items.length).toBe(15)
       expect(searchOutput.total).toEqual(16)
+    })
+
+    it('Should search using filter, sort and pagination', async () => {
+      const createdAt = new Date()
+      const entities: UserEntity[] = []
+      const arrange = ['test', 'a', 'TEST', 'b', 'TeST']
+
+      arrange.forEach((element, index) => {
+        entities.push(
+          new UserEntity({
+            ...UserDataBuilder({ name: element }),
+            createdAt: new Date(createdAt.getTime() + index),
+          }),
+        )
+      })
+
+      await prismaService.user.createMany({ data: entities.map(entity => entity.toJSON()) })
+      const searchOutputPage1 = await sut.search(
+        new UserRepositoryInterface.SearchParams({
+          page: 1,
+          perPage: 2,
+          sort: 'name',
+          sortDir: 'asc',
+          filter: 'TEST',
+        }),
+      )
+
+      expect(searchOutputPage1.items.length).toBe(2)
+      expect(searchOutputPage1.total).toEqual(3)
+      expect(searchOutputPage1.items[0].toJSON()).toMatchObject(entities[0].toJSON())
+      expect(searchOutputPage1.items[1].toJSON()).toMatchObject(entities[4].toJSON())
+
+      const searchOutputPage2 = await sut.search(
+        new UserRepositoryInterface.SearchParams({
+          page: 2,
+          perPage: 2,
+          sort: 'name',
+          sortDir: 'asc',
+          filter: 'TEST',
+        }),
+      )
+
+      expect(searchOutputPage2.items.length).toBe(1)
+      expect(searchOutputPage2.total).toEqual(3)
+      expect(searchOutputPage2.items[0].toJSON()).toMatchObject(entities[2].toJSON())
     })
   })
 })
