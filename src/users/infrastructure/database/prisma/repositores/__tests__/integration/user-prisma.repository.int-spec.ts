@@ -163,4 +163,19 @@ describe('UserPrismaRepository integration tests', () => {
       new NotFoundError(`User not found with ID ${entity.id}`),
     )
   })
+
+  it('Should delete an entity', async () => {
+    const entity = new UserEntity(UserDataBuilder({}))
+    await sut.insert(entity)
+    await sut.delete(entity.id)
+    const user = await prismaService.user.findUnique({ where: { id: entity.id } })
+
+    expect(user).toBeNull()
+  })
+
+  it('Should throw an error when an entity not found', async () => {
+    await expect(sut.delete('fakeId')).rejects.toThrow(
+      new NotFoundError(`User not found with ID fakeId`),
+    )
+  })
 })
