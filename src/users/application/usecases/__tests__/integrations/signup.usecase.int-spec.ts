@@ -32,7 +32,7 @@ describe('SignUpUseCase integration tests', () => {
   })
 
   it('Should throw an erro when input filds are missing', async () => {
-    expect(
+    await expect(() =>
       sut.execute({ name: null, email: null, password: null } as unknown as SignupUseCase.Input),
     ).rejects.toThrow(new BadRequestError('Input data not provided!'))
   })
