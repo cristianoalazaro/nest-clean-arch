@@ -1,19 +1,31 @@
-import { pathsToModuleNameMapper } from 'ts-jest'
-import { compilerOptions } from './tsconfig.json'
+const { pathsToModuleNameMapper } = require('ts-jest')
+const { compilerOptions } = require('./tsconfig.json')
 
-export default {
+module.exports = {
+  preset: 'ts-jest',
+  rootDir: './',
   moduleFileExtensions: ['js', 'json', 'ts'],
   moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths, {
     prefix: '<rootDir>/',
   }),
   testRegex: '.*\\..*spec\\.ts$',
   transform: {
-    '^.+\\.(t|j)s$': 'ts-jest',
+    '^.+\\.(t|j)s$': [
+      'ts-jest',
+      {
+        diagnostics: {
+          ignoreCodes: [5098],
+        },
+        tsconfig: {
+          ...compilerOptions,
+          module: 'commonjs',
+          moduleResolution: 'node',
+        },
+      },
+    ],
   },
+  transformIgnorePatterns: ['node_modules/(?!@faker-js/faker/)'],
+  testEnvironment: 'node',
   collectCoverageFrom: ['**/*.(t|j)s'],
   coverageDirectory: '../coverage',
-  testEnvironment: 'node',
-  transformIgnorePatterns: [
-    '/node_modules/(?!(?:@faker-js/faker|uuid|zod|date-fns)/)',
-  ],
 }
