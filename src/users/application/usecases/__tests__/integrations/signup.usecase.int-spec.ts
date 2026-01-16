@@ -4,7 +4,6 @@ import { HashProvider } from '@/shared/application/providers/hash.provider'
 import { PrismaService } from '@/shared/infrastructure/database/prisma/prisma.service'
 import { BcryptHashProvider } from '@/users/infrastructure/providers/hashProvider/bcryptjs-hash.provider'
 import { BadRequestError } from '@/shared/application/errors/bad-request-error'
-import { UserOutputMapper } from '@/users/application/dtos/user-output'
 
 describe('SignUpUseCase integration tests', () => {
   let sut: SignupUseCase.UseCase
