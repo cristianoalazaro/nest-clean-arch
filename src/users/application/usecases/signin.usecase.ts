@@ -26,6 +26,7 @@ export namespace SigninUseCase {
       }
 
       const entity = await this.userRepository.findByEmail(email)
+
       const isValidPassword = await this.hashProvider.compareHash(password, entity.password)
 
       if (!isValidPassword) {

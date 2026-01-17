@@ -1,11 +1,9 @@
 import { PrismaService } from '@/shared/infrastructure/database/prisma/prisma.service'
 import { UserPrismaRepository } from '@/users/infrastructure/database/prisma/repositores/user-prisma.repository'
-import { UpdateUserUseCase } from '../../updateUser.usecase'
 import { BadRequestError } from '@/shared/application/errors/bad-request-error'
 import { NotFoundError } from '@/shared/domain/errors/not-found-error'
 import { UserEntity } from '@/users/domain/entities/user.entity'
 import { UserDataBuilder } from '@/users/domain/entities/__tests__/testing/helpers/user-data-builder'
-import { UpdatePasswordUserDto } from '@/users/infrastructure/dtos/updatePassword-user.dto'
 import { UpdatePasswordUserUseCase } from '../../updatePasswordUser.usecase'
 import { BcryptHashProvider } from '@/users/infrastructure/providers/hashProvider/bcryptjs-hash.provider'
 
