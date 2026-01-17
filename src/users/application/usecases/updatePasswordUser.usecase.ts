@@ -21,12 +21,14 @@ export namespace UpdatePasswordUserUseCase {
       private userRepository: UserRepositoryInterface.Repository,
       private hashProvider: BcryptHashProvider,
     ) {}
+
     async execute(input: Input): Promise<Output> {
       if (!input.password || !input.oldPassword) {
         throw new BadRequestError('Old password and new password is required!')
       }
 
       const entity = await this.userRepository.findById(input.id)
+
       const isValidPassword = await this.hashProvider.compareHash(
         input.oldPassword,
         entity.password,
