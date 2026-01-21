@@ -40,12 +40,10 @@ jobs:
 
       # Criamos os arquivos .env necessários para o dotenv-cli não falhar
       - name: Create .env files
-        run: |
-          echo "DATABASE_URL=postgresql://postgres:docker@localhost:5432/nest-clean-arch-test" > .env.test
-          echo "DATABASE_URL=postgresql://postgres:docker@localhost:5432/nest-clean-arch-test" > .env.development
+        run: echo "DATABASE_URL=postgresql://postgres:docker@localhost:5432/nest-clean-arch-test" > .env.test
 
       - name: Run Prisma Migrations
-        run: npx prisma migrate deploy
+        run: npx dotenv-cli -e .env.test -- npx prisma migrate deploy
 
       - name: Run Unit Tests
         run: npm run test
