@@ -1,6 +1,6 @@
 import { Transform } from 'class-transformer'
 
-type PaginationPresenterProps = {
+export type PaginationPresenterProps = {
   currentPage: number
   perPage: number
   lastPage: number
