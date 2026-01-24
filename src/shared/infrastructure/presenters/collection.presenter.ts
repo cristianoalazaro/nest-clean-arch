@@ -6,7 +6,7 @@ export abstract class CollectionPresenter {
   protected paginationPresenter: PaginationPresenter
 
   constructor(props: PaginationPresenter) {
-    this.paginationPresenter = props
+    this.paginationPresenter = new PaginationPresenter(props)
   }
 
   @Expose({ name: 'meta' })
