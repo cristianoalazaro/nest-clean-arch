@@ -25,6 +25,7 @@ import { GetUserUseCase } from '../application/usecases/getUser.usecase'
 import { SignInDto } from './dtos/signIn.dto'
 import { UserOutput } from '../application/dtos/user-output'
 import { UserPresenter } from './presenters/user.presenter'
+import { UserCollectionPresenter } from './presenters/user.collection.presenter'
 
 @Controller('users')
 export class UsersController {
@@ -39,6 +40,10 @@ export class UsersController {
 
   static userToResponse(output: UserOutput) {
     return new UserPresenter(output)
+  }
+
+  static listUsersToResponse(output: ListUserUseCase.Output) {
+    return new UserCollectionPresenter(output)
   }
 
   @Post()
@@ -56,7 +61,8 @@ export class UsersController {
 
   @Get()
   async search(@Query() searchParams: ListUsersDto) {
-    return await this.listUserUseCase.execute(searchParams)
+    const output = await this.listUserUseCase.execute(searchParams)
+    return UsersController.listUsersToResponse(output)
   }
 
   @Get(':id')
