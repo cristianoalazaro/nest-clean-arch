@@ -54,7 +54,6 @@ describe('UserCollectionPresenter unit tests', () => {
           id: 'cd36e9a9-bdb6-42bd-a960-121475915524',
           name: 'Test Name',
           email: 'test@test.com',
-          password: '123456',
           createdAt: createdAt.toISOString(),
         },
       ],

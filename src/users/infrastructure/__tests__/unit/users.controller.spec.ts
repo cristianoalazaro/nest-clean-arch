@@ -12,6 +12,8 @@ import { GetUserUseCase } from '@/users/application/usecases/getUser.usecase'
 import { ListUserUseCase } from '@/users/application/usecases/listUser.usecase'
 import { ListUsersDto } from '../../dtos/list-users.dto'
 import { UserPresenter } from '../../presenters/user.presenter'
+import { UserCollectionPresenter } from '../../presenters/user.collection.presenter'
+import { PaginationPresenter } from '@/shared/infrastructure/presenters/pagination.presenter'
 
 describe('UsersController unit tests', () => {
   let sut: UsersController
@@ -153,8 +155,9 @@ describe('UsersController unit tests', () => {
 
     sut['listUserUseCase'] = listUserUseCaseMock as any
 
-    const result = await sut.search(input)
-    expect(result).toMatchObject(output)
+    const presenter = await sut.search(input)
+    expect(presenter).toBeInstanceOf(UserCollectionPresenter)
+    expect(presenter).toStrictEqual(new UserCollectionPresenter(output))
     expect(listUserUseCaseMock.execute).toHaveBeenCalledWith(input)
   })
 })
