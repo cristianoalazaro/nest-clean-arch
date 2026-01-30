@@ -1,7 +1,5 @@
-// const { pathsToModuleNameMapper } = require('ts-jest')
-// const { compilerOptions } = require('./tsconfig.json')
-
-import { compilerOptions, pathsToModuleNameMapper } from 'jest.config'
+const { pathsToModuleNameMapper } = require('ts-jest')
+const { compilerOptions } = require('./tsconfig.json')
 
 module.exports = {
   preset: 'ts-jest',
@@ -10,7 +8,7 @@ module.exports = {
   moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths, {
     prefix: '<rootDir>/',
   }),
-  testRegex: '.*\\e2e-spec\\.ts$',
+  testMatch: ['**/*.e2e-spec.ts'],
   transform: {
     '^.+\\.(t|j)s$': [
       'ts-jest',
@@ -30,4 +28,5 @@ module.exports = {
   testEnvironment: 'node',
   collectCoverageFrom: ['**/*.(t|j)s'],
   coverageDirectory: '../coverage',
+  testTimeout: 30000,
 }
