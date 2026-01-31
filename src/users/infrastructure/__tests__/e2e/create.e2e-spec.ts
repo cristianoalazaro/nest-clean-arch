@@ -40,7 +40,7 @@ describe('UsersControllers unit tests', () => {
     await prismaService.user.deleteMany()
   })
 
-  beforeAll(async () => {
+  afterAll(async () => {
     if (app) {
       await app.close()
     }
