@@ -53,3 +53,6 @@ jobs:
 
       - name: Run Integration Tests
         run: npm run test:int
+
+      - name: Run e2e Tests
+        run: npm run test:e2e
