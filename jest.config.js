@@ -8,7 +8,7 @@ module.exports = {
   moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths, {
     prefix: '<rootDir>/',
   }),
-  testMatch: ['**/*.e2e-spec.ts'],
+  testRegex: '.*\\..*spec\\.ts$',
   transform: {
     '^.+\\.(t|j)s$': [
       'ts-jest',
@@ -24,9 +24,9 @@ module.exports = {
       },
     ],
   },
+  testPathIgnorePatterns: ['/node_modules/', '\\.int-spec\\.ts$', '\\.e2e-spec\\.ts$'],
   transformIgnorePatterns: ['node_modules/(?!@faker-js/faker/)'],
   testEnvironment: 'node',
   collectCoverageFrom: ['**/*.(t|j)s'],
   coverageDirectory: '../coverage',
-  testTimeout: 30000,
 }
