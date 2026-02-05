@@ -61,5 +61,56 @@ describe('UsersControllers unit tests', () => {
       const serialized = instanceToPlain(presenter)
       expect(serialized).toStrictEqual(res.body.data)
     })
+
+    it('Should return an error with 422 code when the request body is invalid', async () => {
+      const res = await request(app.getHttpServer()).post('/users').send({}).expect(422)
+      expect(res.body.message).toStrictEqual([
+        'name should not be empty',
+        'name must be a string',
+        'email must be an email',
+        'email should not be empty',
+        'email must be a string',
+        'password should not be empty',
+        'password must be a string',
+      ])
+      expect(res.body.error).toBe('Unprocessable Entity')
+    })
+
+    it('Should return an error with 422 code when the name field is invalid', async () => {
+      delete signupDto.name
+      const res = await request(app.getHttpServer()).post('/users').send(signupDto).expect(422)
+      expect(res.body.message).toStrictEqual(['name should not be empty', 'name must be a string'])
+      expect(res.body.error).toBe('Unprocessable Entity')
+    })
+
+    it('Should return an error with 422 code when the email field is invalid', async () => {
+      delete signupDto.email
+      const res = await request(app.getHttpServer()).post('/users').send(signupDto).expect(422)
+      expect(res.body.message).toStrictEqual([
+        'email must be an email',
+        'email should not be empty',
+        'email must be a string',
+      ])
+      expect(res.body.error).toBe('Unprocessable Entity')
+    })
+
+    it('Should return an error with 422 code when the password field is invalid', async () => {
+      delete signupDto.password
+      const res = await request(app.getHttpServer()).post('/users').send(signupDto).expect(422)
+      expect(res.body.message).toStrictEqual([
+        'password should not be empty',
+        'password must be a string',
+      ])
+      expect(res.body.error).toBe('Unprocessable Entity')
+    })
+
+    it('Should return an error with 422 code when invalid field provided', async () => {
+      const res = await request(app.getHttpServer())
+        .post('/users')
+        .send(Object.assign(signupDto, { xpto: 'fake' }))
+        .expect(422)
+      expect(res.body.message).toStrictEqual(['property xpto should not exist'])
+      expect(res.body.error).toBe('Unprocessable Entity')
+    })
   })
 })
