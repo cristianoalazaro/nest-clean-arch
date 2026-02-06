@@ -45,6 +45,8 @@ describe('UsersControllers unit tests', () => {
   })
 
   afterAll(async () => {
+    await module.close()
+
     if (app) {
       await app.close()
     }

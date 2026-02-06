@@ -15,7 +15,7 @@
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "test": "npx dotenv-cli -e .env.test -- jest --runInBand --config jest.config.js",
     "test:int": "cross-env NODE_ENV=test npx dotenv-cli -e .env.test -- jest --config jest.int.config.js --runInBand",
-    "test:e2e": "cross-env NODE_ENV=test npx dotenv-cli -e .env.test -- jest --config jest.e2e.config.js --runInBand",
+    "test:e2e": "cross-env NODE_ENV=test npx dotenv-cli -e .env.test -- jest --config jest.e2e.config.js --runInBand --detectOpenHandles",
     "test:all": "npm run test && npm run test:int && npm run test:e2e",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand"
