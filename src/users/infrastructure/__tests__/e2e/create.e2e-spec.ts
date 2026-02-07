@@ -14,7 +14,7 @@ import { applyGlobalConfig } from '@/global.config'
 import { UserEntity } from '@/users/domain/entities/user.entity'
 import { UserDataBuilder } from '@/users/domain/entities/__tests__/testing/helpers/user-data-builder'
 
-describe('UsersControllers unit tests', () => {
+describe('UsersControllers e2e tests', () => {
   let app: INestApplication
   let module: TestingModule
   let repository: UserRepositoryInterface.Repository

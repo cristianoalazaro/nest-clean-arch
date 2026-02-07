@@ -12,7 +12,7 @@ class StubController {
   }
 }
 
-describe('ConflictError (e2e)', () => {
+describe('ConflictErrorFilter (e2e)', () => {
   let app: INestApplication
   let module: TestingModule
 
