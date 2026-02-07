@@ -25,7 +25,7 @@ describe('ConflictErrorFilter (e2e)', () => {
   })
 
   it('Should be defined', () => {
-    expect(app).toBeDefined()
+    expect(new ConflictErrorFilter()).toBeDefined()
   })
 
   it('Should get a ConflicError', () => {
