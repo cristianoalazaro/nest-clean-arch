@@ -1,14 +1,10 @@
-## Health check
-GET http://localhost:3000
-###
-
 ## List users
 GET  http://localhost:3000/users?page=1&perPage=15&sort=name&sortDir=asc
 Content-Type: application/json
 ###
 
 ## get user by id
-GET  http://localhost:3000/users/93494def-685e-4922-9870-75c0cd83005d
+GET  http://localhost:3000/users/56c21a1f-6e2c-483a-a29b-e7f05f3663d5
 Content-Type: application/json
 ###
 
@@ -17,8 +13,8 @@ POST http://localhost:3000/users
 Content-Type: application/json
 
 {
-  "name": "Test Name 3",
-  "email": "test3@test.com",
+  "name": "Test Name 4",
+  "email": "test4@test.com",
   "password": "123456"
 }
 ###
