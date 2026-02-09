@@ -51,19 +51,13 @@ describe('UsersController e2e tests', () => {
     await prismaService.$disconnect()
   })
 
-  describe('GET /users/:id', () => {
-    it('Should return a user', async () => {
-      const res = await request(app.getHttpServer()).get(`/users/${entity.id}`).expect(200)
-
-      expect(Object.keys(res.body)).toStrictEqual(['data'])
-
-      const presenter = UsersController.userToResponse(entity.toJSON())
-      const serialized = instanceToPlain(presenter)
-      expect(serialized).toStrictEqual(res.body.data)
+  describe('DELETE /users/:id', () => {
+    it('Should remove a user', async () => {
+      return await request(app.getHttpServer()).delete(`/users/${entity.id}`).expect(204).expect({})
     })
 
     it('Should return an error with 404 code when the user is not found', async () => {
-      const res = await request(app.getHttpServer()).get(`/users/fake_id`).expect(404)
+      const res = await request(app.getHttpServer()).delete(`/users/fake_id`).expect(404)
       expect(res.body).toStrictEqual({
         statusCode: 404,
         error: 'Not Found',
