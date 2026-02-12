@@ -80,7 +80,6 @@ describe('UsersController e2e tests', () => {
 
     it('Should return a error with 422 code when the query param is invalid', async () => {
       const res = await request(app.getHttpServer()).get(`/users?fake_id=10`).expect(422)
-      console.log(res.body)
       expect(res.body).toStrictEqual({
         message: ['property fake_id should not exist'],
         error: 'Unprocessable Entity',
