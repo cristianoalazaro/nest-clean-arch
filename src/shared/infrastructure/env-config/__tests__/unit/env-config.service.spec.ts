@@ -8,7 +8,17 @@ describe('EnvConfigService unit tests', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [EnvConfigModule.forRoot()],
-      providers: [EnvConfigService],
+      providers: [
+        {
+          provide: EnvConfigService,
+          useValue: {
+            getAppPort: () => 3000,
+            getNodeEnv: () => 'test',
+            getJwtSecret: () => 'fake_secret',
+            getJwtExpiresInSeconds: () => 86400,
+          },
+        },
+      ],
     }).compile()
 
     sut = module.get<EnvConfigService>(EnvConfigService)
@@ -27,7 +37,7 @@ describe('EnvConfigService unit tests', () => {
   })
 
   it('should returned the variable JWT_SECRET', () => {
-    expect(sut.getJwtSecret()).toBe('fake_secrect')
+    expect(sut.getJwtSecret()).toBe('fake_secret')
   })
 
   it('should returned the variable JWT_EXPIRES_IN', () => {
