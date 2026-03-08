@@ -10,7 +10,7 @@ type GenerateJwtProps = {
 export class AuthService {
   constructor(
     private jwtService: JwtService,
-    private configService: EnvConfigService,
+    private envConfigService: EnvConfigService,
   ) {}
 
   async generateJwt(userId: string): Promise<GenerateJwtProps> {
@@ -20,7 +20,7 @@ export class AuthService {
 
   async verifyJwt(token: string) {
     return this.jwtService.verifyAsync(token, {
-      secret: this.configService.getJwtSecret(),
+      secret: this.envConfigService.getJwtSecret(),
     })
   }
 }
