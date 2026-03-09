@@ -40,4 +40,16 @@ describe('WrapperDataInterceptor', () => {
       },
     })
   })
+
+  it('should not wrapper when accessToken key is present', () => {
+    const result = { data: props, accessToken: 'fakeJwt' }
+
+    const obs$ = interceptor.intercept({} as any, { handle: () => of(result) })
+
+    obs$.subscribe({
+      next: value => {
+        expect(value).toEqual(result)
+      },
+    })
+  })
 })

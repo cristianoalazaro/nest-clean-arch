@@ -26,17 +26,19 @@ import { SignInDto } from './dtos/signIn.dto'
 import { UserOutput } from '../application/dtos/user-output'
 import { UserPresenter } from './presenters/user.presenter'
 import { UserCollectionPresenter } from './presenters/user.collection.presenter'
+import { AuthService } from '@/auth/infrastructure/auth.service'
 
 @Controller('users')
 export class UsersController {
-  @Inject(SignupUseCase.UseCase) signUpUseCase: SignupUseCase.UseCase
-  @Inject(SigninUseCase.UseCase) signInUseCase: SigninUseCase.UseCase
-  @Inject(UpdateUserUseCase.UseCase) updateUserUseCase: UpdateUserUseCase.UseCase
+  @Inject(SignupUseCase.UseCase) private signUpUseCase: SignupUseCase.UseCase
+  @Inject(SigninUseCase.UseCase) private signInUseCase: SigninUseCase.UseCase
+  @Inject(UpdateUserUseCase.UseCase) private updateUserUseCase: UpdateUserUseCase.UseCase
   @Inject(UpdatePasswordUserUseCase.UseCase)
-  updatePasswordUserUseCase: UpdatePasswordUserUseCase.UseCase
-  @Inject(DeleteUserUseCase.UseCase) deleteUserUseCase: DeleteUserUseCase.UseCase
-  @Inject(ListUserUseCase.UseCase) listUserUseCase: ListUserUseCase.UseCase
-  @Inject(GetUserUseCase.UseCase) getUserUseCase: GetUserUseCase.UseCase
+  private updatePasswordUserUseCase: UpdatePasswordUserUseCase.UseCase
+  @Inject(DeleteUserUseCase.UseCase) private deleteUserUseCase: DeleteUserUseCase.UseCase
+  @Inject(ListUserUseCase.UseCase) private listUserUseCase: ListUserUseCase.UseCase
+  @Inject(GetUserUseCase.UseCase) private getUserUseCase: GetUserUseCase.UseCase
+  @Inject(AuthService) private authService: AuthService
 
   static userToResponse(output: UserOutput) {
     return new UserPresenter(output)
@@ -56,7 +58,7 @@ export class UsersController {
   @Post('login')
   async login(@Body() signInDto: SignInDto) {
     const output = await this.signInUseCase.execute(signInDto)
-    return UsersController.userToResponse(output)
+    return this.authService.generateJwt(output.id)
   }
 
   @Get()

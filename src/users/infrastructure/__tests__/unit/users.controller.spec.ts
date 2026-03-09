@@ -13,7 +13,6 @@ import { ListUserUseCase } from '@/users/application/usecases/listUser.usecase'
 import { ListUsersDto } from '../../dtos/list-users.dto'
 import { UserPresenter } from '../../presenters/user.presenter'
 import { UserCollectionPresenter } from '../../presenters/user.collection.presenter'
-import { PaginationPresenter } from '@/shared/infrastructure/presenters/pagination.presenter'
 
 describe('UsersController unit tests', () => {
   let sut: UsersController
@@ -58,16 +57,21 @@ describe('UsersController unit tests', () => {
       email: 'a@a.com',
       password: '123456',
     }
-    const output: SigninUseCase.Output = props
+    const output: string = 'fakeJwt'
+
     const signinUseCaseMock = {
       execute: jest.fn().mockResolvedValue(Promise.resolve(output)),
     }
 
-    sut['signInUseCase'] = signinUseCaseMock as any
+    const authServiceMock = {
+      generateJwt: jest.fn().mockReturnValue(output),
+    }
 
-    const presenter = await sut.login(input)
-    expect(presenter).toBeInstanceOf(UserPresenter)
-    expect(presenter).toStrictEqual(new UserPresenter(output))
+    sut['signInUseCase'] = signinUseCaseMock as any
+    sut['authService'] = authServiceMock as any
+
+    const result = await sut.login(input)
+    expect(result).toEqual(output)
     expect(signinUseCaseMock.execute).toHaveBeenCalledWith(input)
   })
 
