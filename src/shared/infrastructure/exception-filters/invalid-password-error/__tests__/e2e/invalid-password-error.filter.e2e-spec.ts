@@ -1,8 +1,8 @@
 import { Controller, Get, INestApplication } from '@nestjs/common'
 import { Test, TestingModule } from '@nestjs/testing'
 import request from 'supertest'
-import { InvalidPasswordErrorFilter } from '../../invalid-password-error.filter'
 import { InvalidPasswordError } from '@/shared/application/errors/invalid-password-error'
+import { InvalidPasswordErrorFilter } from '../../invalid-password-error.filter'
 
 @Controller('/stub')
 class StubController {
