@@ -1,6 +1,7 @@
 ## List users
 GET  http://localhost:3000/users?page=1&perPage=15&sort=name&sortDir=asc
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImU0Yzc2NTI1LWI2MTYtNDNjNS04NDgzLWZhMDhlMjZmYWZmYyIsImlhdCI6MTc3MzM5ODMxOCwiZXhwIjoxNzczNDg0NzE4fQ.-_2GoswJ4HszoInjqXKJPVxiIR_vVVpva8emQjWfoyc
 ###
 
 ## get user by id
