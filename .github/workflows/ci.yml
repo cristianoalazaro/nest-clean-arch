@@ -56,3 +56,6 @@ jobs:
 
       - name: Run e2e Tests
         run: npm run test:e2e
+        env:
+          JWT_SECRET: fake_secret
+          JWT_EXPIRES_IN: 86400
