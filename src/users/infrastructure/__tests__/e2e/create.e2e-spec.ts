@@ -33,7 +33,7 @@ describe('UsersControllers e2e tests', () => {
     await app.init()
 
     repository = module.get<UserRepositoryInterface.Repository>('UserRepository')
-  }, 60000)
+  })
 
   beforeEach(async () => {
     signupDto = {

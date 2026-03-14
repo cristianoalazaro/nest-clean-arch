@@ -13,6 +13,7 @@ import request from 'supertest'
 import { UpdatePasswordUserDto } from '../../dtos/updatePassword-user.dto'
 import { BcryptHashProvider } from '../../providers/hashProvider/bcryptjs-hash.provider'
 import { HashProvider } from '@/shared/application/providers/hash.provider'
+import { JwtService } from '@nestjs/jwt'
 
 describe('UsersControllers e2e tests', () => {
   let app: INestApplication
@@ -23,6 +24,7 @@ describe('UsersControllers e2e tests', () => {
   let hashProvider: HashProvider
   const prismaService = new PrismaService()
   let accessToken: string
+  let jwtService: JwtService
 
   beforeAll(async () => {
     setupPrismaTests()
@@ -36,6 +38,8 @@ describe('UsersControllers e2e tests', () => {
     await app.init()
 
     repository = module.get<UserRepositoryInterface.Repository>('UserRepository')
+    jwtService = module.get<JwtService>(JwtService)
+
     hashProvider = new BcryptHashProvider()
   }, 10000)
 
@@ -51,11 +55,7 @@ describe('UsersControllers e2e tests', () => {
     entity = new UserEntity(UserDataBuilder({ email: 'test@test.com', password: hashOldPassword }))
     await repository.insert(entity)
 
-    const loginRequest = await request(app.getHttpServer())
-      .post('/users/login')
-      .send({ email: 'test@test.com', password: '123456' })
-
-    accessToken = loginRequest.body.accessToken
+    accessToken = jwtService.sign({ id: entity.id })
   })
 
   afterAll(async () => {

@@ -19,7 +19,8 @@ describe('UsersControllers e2e tests', () => {
   let repository: UserRepositoryInterface.Repository
   let signinDto: SignInDto
   const prismaService = new PrismaService()
-  const hashProvider = new BcryptHashProvider()
+  let hashProvider = new BcryptHashProvider()
+  let hashPassword: string
 
   beforeAll(async () => {
     setupPrismaTests()
@@ -32,7 +33,10 @@ describe('UsersControllers e2e tests', () => {
     await app.init()
 
     repository = module.get<UserRepositoryInterface.Repository>('UserRepository')
-  }, 60000)
+
+    hashProvider = new BcryptHashProvider()
+    hashPassword = await hashProvider.generateHash('123456')
+  }, 10000)
 
   beforeEach(async () => {
     signinDto = {
@@ -55,8 +59,11 @@ describe('UsersControllers e2e tests', () => {
 
   describe('POST /users/login', () => {
     it('Should authenticate a user', async () => {
-      const hash = await hashProvider.generateHash(signinDto.password)
-      const entity = UserDataBuilder({ ...signinDto, email: signinDto.email, password: hash })
+      const entity = UserDataBuilder({
+        ...signinDto,
+        email: signinDto.email,
+        password: hashPassword,
+      })
       await repository.insert(new UserEntity(entity))
 
       const res = await request(app.getHttpServer())
@@ -119,8 +126,11 @@ describe('UsersControllers e2e tests', () => {
     })
 
     it('Should return an error with 400 code when the password field is incorrect', async () => {
-      const hash = await hashProvider.generateHash(signinDto.password)
-      const entity = UserDataBuilder({ ...signinDto, email: signinDto.email, password: hash })
+      const entity = UserDataBuilder({
+        ...signinDto,
+        email: signinDto.email,
+        password: hashPassword,
+      })
 
       await repository.insert(new UserEntity(entity))
 
@@ -137,5 +147,3 @@ describe('UsersControllers e2e tests', () => {
     })
   })
 })
-
-// forçar deploy
