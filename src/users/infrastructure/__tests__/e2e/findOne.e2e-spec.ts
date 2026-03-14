@@ -45,7 +45,7 @@ describe('UsersController e2e tests', () => {
   beforeEach(async () => {
     await prismaService.user.deleteMany()
 
-    entity = new UserEntity(UserDataBuilder({ email: 'test@test.com', passsword: hashPassword }))
+    entity = new UserEntity(UserDataBuilder({ email: 'test@test.com', password: hashPassword }))
     await repository.insert(entity)
 
     const loginRequest = await request(app.getHttpServer())
@@ -92,7 +92,7 @@ describe('UsersController e2e tests', () => {
     })
 
     it('Should return an error with 401 code when the request is not authorized', async () => {
-      const res = await request(app.getHttpServer()).get(`/users/fake_id`).expect(401)
+      const res = await request(app.getHttpServer()).get(`/users/${entity.id}`).expect(401)
       expect(res.body).toStrictEqual({
         statusCode: 401,
         message: 'Unauthorized',

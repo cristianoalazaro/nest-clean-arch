@@ -10,8 +10,6 @@ import { DatabaseModule } from '@/shared/infrastructure/database/database.module
 import { UserEntity } from '@/users/domain/entities/user.entity'
 import { UserDataBuilder } from '@/users/domain/entities/__tests__/testing/helpers/user-data-builder'
 import request from 'supertest'
-import { UsersController } from '../../users.controller'
-import { instanceToPlain } from 'class-transformer'
 import { UpdatePasswordUserDto } from '../../dtos/updatePassword-user.dto'
 import { BcryptHashProvider } from '../../providers/hashProvider/bcryptjs-hash.provider'
 import { HashProvider } from '@/shared/application/providers/hash.provider'
@@ -24,6 +22,7 @@ describe('UsersControllers e2e tests', () => {
   let entity: UserEntity
   let hashProvider: HashProvider
   const prismaService = new PrismaService()
+  let accessToken: string
 
   beforeAll(async () => {
     setupPrismaTests()
@@ -38,7 +37,7 @@ describe('UsersControllers e2e tests', () => {
 
     repository = module.get<UserRepositoryInterface.Repository>('UserRepository')
     hashProvider = new BcryptHashProvider()
-  })
+  }, 10000)
 
   beforeEach(async () => {
     await prismaService.user.deleteMany()
@@ -49,8 +48,14 @@ describe('UsersControllers e2e tests', () => {
 
     updatePasswordDto = { oldPassword, password: newPassword }
 
-    entity = new UserEntity(UserDataBuilder({ passsword: hashOldPassword }))
+    entity = new UserEntity(UserDataBuilder({ email: 'test@test.com', password: hashOldPassword }))
     await repository.insert(entity)
+
+    const loginRequest = await request(app.getHttpServer())
+      .post('/users/login')
+      .send({ email: 'test@test.com', password: '123456' })
+
+    accessToken = loginRequest.body.accessToken
   })
 
   afterAll(async () => {
@@ -68,6 +73,7 @@ describe('UsersControllers e2e tests', () => {
       const res = await request(app.getHttpServer())
         .patch(`/users/${entity.id}`)
         .send(updatePasswordDto)
+        .set('Authorization', `Bearer ${accessToken}`)
         .expect(200)
 
       expect(Object.keys(res.body)).toStrictEqual(['data'])
@@ -81,6 +87,7 @@ describe('UsersControllers e2e tests', () => {
       const res = await request(app.getHttpServer())
         .patch(`/users/${entity.id}`)
         .send({})
+        .set('Authorization', `Bearer ${accessToken}`)
         .expect(422)
 
       expect(res.body).toStrictEqual({
@@ -100,6 +107,7 @@ describe('UsersControllers e2e tests', () => {
       const res = await request(app.getHttpServer())
         .patch(`/users/${entity.id}`)
         .send(updatePasswordDto)
+        .set('Authorization', `Bearer ${accessToken}`)
         .expect(422)
 
       expect(res.body).toStrictEqual({
@@ -114,6 +122,7 @@ describe('UsersControllers e2e tests', () => {
       const res = await request(app.getHttpServer())
         .patch(`/users/${entity.id}`)
         .send(updatePasswordDto)
+        .set('Authorization', `Bearer ${accessToken}`)
         .expect(422)
 
       expect(res.body).toStrictEqual({
@@ -127,6 +136,7 @@ describe('UsersControllers e2e tests', () => {
       const res = await request(app.getHttpServer())
         .patch(`/users/fakeId`)
         .send(updatePasswordDto)
+        .set('Authorization', `Bearer ${accessToken}`)
         .expect(404)
 
       expect(res.body).toStrictEqual({
@@ -142,12 +152,25 @@ describe('UsersControllers e2e tests', () => {
       const res = await request(app.getHttpServer())
         .patch(`/users/${entity.id}`)
         .send(updatePasswordDto)
+        .set('Authorization', `Bearer ${accessToken}`)
         .expect(422)
 
       expect(res.body).toStrictEqual({
         statusCode: 422,
         error: 'Unprocessable Entity',
         message: 'Password is invalid!',
+      })
+    })
+
+    it('Should return an error with 401 code when the request is not authorized', async () => {
+      const res = await request(app.getHttpServer())
+        .patch(`/users/${entity.id}`)
+        .send(updatePasswordDto)
+        .expect(401)
+
+      expect(res.body).toStrictEqual({
+        statusCode: 401,
+        message: 'Unauthorized',
       })
     })
   })

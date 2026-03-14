@@ -21,7 +21,7 @@ describe('SigninUseCase unit tests', () => {
   it('Should authenticate a user', async () => {
     const spyFindByEmailMethod = jest.spyOn(repository, 'findByEmail')
     const hash = await hashProvider.generateHash('123456')
-    const entity = new UserEntity(UserDataBuilder({ passsword: hash }))
+    const entity = new UserEntity(UserDataBuilder({ password: hash }))
     repository.items = [entity]
 
     const result = await sut.execute({ email: entity.email, password: '123456' })
@@ -51,7 +51,7 @@ describe('SigninUseCase unit tests', () => {
 
   it('Should throw an error when the password does not match', async () => {
     const hash = await hashProvider.generateHash('123456')
-    const entity = new UserEntity(UserDataBuilder({ passsword: hash }))
+    const entity = new UserEntity(UserDataBuilder({ password: hash }))
     repository.items = [entity]
 
     await expect(sut.execute({ email: entity.email, password: '456789' })).rejects.toThrow(

@@ -1,6 +1,5 @@
 import { INestApplication } from '@nestjs/common'
 import { Test, TestingModule } from '@nestjs/testing'
-import { UserPrismaRepository } from '../../database/prisma/repositores/user-prisma.repository'
 import { UserRepositoryInterface } from '@/users/repositories/user.repository.interface'
 import { PrismaService } from '@/shared/infrastructure/database/prisma/prisma.service'
 import { setupPrismaTests } from '@/shared/infrastructure/database/prisma/testing/setup-prisma-tests'
@@ -14,6 +13,8 @@ import { UserDataBuilder } from '@/users/domain/entities/__tests__/testing/helpe
 import request from 'supertest'
 import { UsersController } from '../../users.controller'
 import { instanceToPlain } from 'class-transformer'
+import { HashProvider } from '@/shared/application/providers/hash.provider'
+import { BcryptHashProvider } from '../../providers/hashProvider/bcryptjs-hash.provider'
 
 describe('UsersControllers e2e tests', () => {
   let app: INestApplication
@@ -22,6 +23,9 @@ describe('UsersControllers e2e tests', () => {
   const prismaService = new PrismaService()
   let updateDto: UpdateUserDto
   let entity: UserEntity
+  let hashProvider: HashProvider
+  let hashPassword: string
+  let accessToken: string
 
   beforeAll(async () => {
     setupPrismaTests()
@@ -35,15 +39,24 @@ describe('UsersControllers e2e tests', () => {
     await app.init()
 
     repository = module.get<UserRepositoryInterface.Repository>('UserRepository')
-  })
+
+    hashProvider = new BcryptHashProvider()
+    hashPassword = await hashProvider.generateHash('123456')
+  }, 10000)
 
   beforeEach(async () => {
     await prismaService.user.deleteMany()
 
     updateDto = { name: 'Test Name' }
 
-    entity = new UserEntity(UserDataBuilder({}))
+    entity = new UserEntity(UserDataBuilder({ email: 'test@test.com', password: hashPassword }))
     await repository.insert(entity)
+
+    const loginRequest = await request(app.getHttpServer())
+      .post('/users/login')
+      .send({ email: 'test@test.com', password: '123456' })
+
+    accessToken = loginRequest.body.accessToken
   })
 
   afterAll(async () => {
@@ -61,6 +74,7 @@ describe('UsersControllers e2e tests', () => {
       const res = await request(app.getHttpServer())
         .put(`/users/${entity.id}`)
         .send(updateDto)
+        .set('Authorization', `Bearer ${accessToken}`)
         .expect(200)
 
       expect(Object.keys(res.body)).toStrictEqual(['data'])
@@ -72,7 +86,11 @@ describe('UsersControllers e2e tests', () => {
     })
 
     it('Should return an error with 422 code when the request body is invalid', async () => {
-      const res = await request(app.getHttpServer()).put(`/users/${entity.id}`).send({}).expect(422)
+      const res = await request(app.getHttpServer())
+        .put(`/users/${entity.id}`)
+        .send({})
+        .set('Authorization', `Bearer ${accessToken}`)
+        .expect(422)
 
       expect(res.body).toStrictEqual({
         message: ['name should not be empty', 'name must be a string'],
@@ -86,6 +104,7 @@ describe('UsersControllers e2e tests', () => {
       const res = await request(app.getHttpServer())
         .put(`/users/${entity.id}`)
         .send(updateDto)
+        .set('Authorization', `Bearer ${accessToken}`)
         .expect(422)
 
       expect(res.body).toStrictEqual({
@@ -99,12 +118,25 @@ describe('UsersControllers e2e tests', () => {
       const res = await request(app.getHttpServer())
         .put(`/users/fakeId`)
         .send(updateDto)
+        .set('Authorization', `Bearer ${accessToken}`)
         .expect(404)
 
       expect(res.body).toStrictEqual({
         statusCode: 404,
         error: 'Not Found',
         message: 'User not found with ID fakeId',
+      })
+    })
+
+    it('Should return an error with 401 code when the request is not authorized', async () => {
+      const res = await request(app.getHttpServer())
+        .put(`/users/${entity.id}`)
+        .send(updateDto)
+        .expect(401)
+
+      expect(res.body).toStrictEqual({
+        statusCode: 401,
+        message: 'Unauthorized',
       })
     })
   })

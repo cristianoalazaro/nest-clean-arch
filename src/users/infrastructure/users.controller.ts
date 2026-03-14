@@ -77,6 +77,7 @@ export class UsersController {
     return UsersController.userToResponse(output)
   }
 
+  @UseGuards(AuthGuard)
   @Put(':id')
   async updateName(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     const output = await this.updateUserUseCase.execute({ id, ...updateUserDto })

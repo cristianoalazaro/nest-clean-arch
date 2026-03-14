@@ -22,7 +22,7 @@ describe('UpdatePasswordUserUseCase unit tests', () => {
   it('Should update a user password', async () => {
     const spyUpdateMethod = jest.spyOn(repository, 'update')
     const hash = await hashProvider.generateHash('123456')
-    const entity = new UserEntity(UserDataBuilder({ passsword: hash }))
+    const entity = new UserEntity(UserDataBuilder({ password: hash }))
     repository.items = [entity]
 
     const result = await sut.execute({

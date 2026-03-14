@@ -49,7 +49,7 @@ describe('UpdatePasswordUserUseCase integration tests', () => {
   })
 
   it('Should throw an error when the password checking is false', async () => {
-    const entity = new UserEntity(UserDataBuilder({ passsword: '123456' }))
+    const entity = new UserEntity(UserDataBuilder({ password: '123456' }))
     await prismaService.user.create({ data: entity })
 
     await expect(
@@ -60,7 +60,7 @@ describe('UpdatePasswordUserUseCase integration tests', () => {
   it('Should update a user password', async () => {
     const oldPassword = await hashProvider.generateHash('123456')
 
-    const entity = new UserEntity(UserDataBuilder({ passsword: oldPassword }))
+    const entity = new UserEntity(UserDataBuilder({ password: oldPassword }))
     await prismaService.user.create({ data: entity })
 
     const output = await sut.execute({ id: entity.id, password: '456789', oldPassword: '123456' })

@@ -51,7 +51,7 @@ describe('SignInUseCase integration tests', () => {
 
   it('Should throw an error with the wrong password', async () => {
     const hash = await hashProvider.generateHash('1234546')
-    const entity = new UserEntity(UserDataBuilder({ email: 'test@test.com', passsword: hash }))
+    const entity = new UserEntity(UserDataBuilder({ email: 'test@test.com', password: hash }))
 
     await prismaService.user.create({ data: entity })
 
@@ -62,7 +62,7 @@ describe('SignInUseCase integration tests', () => {
 
   it('Should authenticate a user', async () => {
     const hash = await hashProvider.generateHash('123456')
-    const entity = new UserEntity(UserDataBuilder({ email: 'test@test.com', passsword: hash }))
+    const entity = new UserEntity(UserDataBuilder({ email: 'test@test.com', password: hash }))
 
     await prismaService.user.create({ data: entity })
 
