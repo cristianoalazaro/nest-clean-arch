@@ -1,11 +1,18 @@
 import { UserOutput } from '@/users/application/dtos/user-output'
+import { ApiProperty } from '@nestjs/swagger'
 import { Transform } from 'class-transformer'
 
 export class UserPresenter {
+  @ApiProperty({ description: 'Ientificação do usuário' })
   id: string
+
+  @ApiProperty({ description: 'Nome do usuário' })
   name: string
+
+  @ApiProperty({ description: 'E-mail do usuário' })
   email: string
 
+  @ApiProperty({ description: 'Data de criação do usuário' })
   @Transform(({ value }: { value: Date }) => value.toISOString())
   createdAt: Date
 
