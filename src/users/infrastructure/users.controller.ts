@@ -159,6 +159,19 @@ export class UsersController {
     return UsersController.userToResponse(output)
   }
 
+  @ApiBearerAuth()
+  @ApiResponse({
+    status: 422,
+    description: 'Parâmetros de consulta inválidos',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Usuário não encontrado',
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Acesso não autorizado',
+  })
   @UseGuards(AuthGuard)
   @Put(':id')
   async updateName(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
