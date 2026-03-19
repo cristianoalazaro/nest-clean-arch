@@ -175,6 +175,8 @@ export class UsersController {
   @UseGuards(AuthGuard)
   @Put(':id')
   async updateName(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
+    console.log(id)
+
     const output = await this.updateUserUseCase.execute({ id, ...updateUserDto })
     return UsersController.userToResponse(output)
   }
